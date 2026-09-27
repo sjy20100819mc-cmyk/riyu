@@ -1,88 +1,84 @@
-/* skin.css —— 全站共用皮肤（动态亮色背景 + 玻璃质感 + 统一圆角/强调色）
-   任何页面最后 include 这个文件即可；打印时自动退回纯白。 */
+/* skin.css —— 全站共用皮肤「和風 · 富士」
+   和纸底 + 墨色字 + 朱红强调 + 藍色辅助；明朝体标题；自带深色（夜・藍墨）；打印自动退回纯白。
+   只放「颜色/字体/背景」这类全站通用的东西，各页面自己的组件样式写在页面里。 */
 :root{
-  --ink:#0b1220; --ink2:#5b6473; --ink3:#8b94a3;
-  --blue:#0a84ff; --blue2:#4aa3ff; --green:#0f9f5a; --red:#e5484d; --amber:#c8890a;
-  --r:22px; --hair:rgba(11,18,32,.08);
-  --glass:linear-gradient(165deg,rgba(255,255,255,.84),rgba(255,255,255,.62));
-  --sh:0 1px 1px rgba(255,255,255,.9) inset,0 12px 30px rgba(16,26,44,.10),0 2px 6px rgba(16,26,44,.06);
+  /* 白練（冷调和纸）底 · 墨色字 · 藍为主色 · 金茶点缀 · 朱只用于印章 */
+  --paper:#f1f2ed; --paper2:#e5e7e0; --solid:#fbfbf8; --card:rgba(251,251,248,.93); --card2:rgba(255,255,255,.62);
+  --ink:#1b1e25; --ink2:#4b515d; --ink3:#878d97; --line:rgba(27,30,37,.12);
+  --acc:#1f3a60; --acc2:#2f5487; --accBg:#1f3a60; --accBg2:#33598f; --accSoft:rgba(31,58,96,.09);
+  --shu:#c23b22; --shu2:#d9573c; --shuSoft:rgba(194,59,34,.1);
+  --ai:#1f3a60; --ai2:#2f5487; --aiSoft:rgba(31,58,96,.08);
+  --kin:#a0722a; --matcha:#4a7535; --matchaSoft:rgba(74,117,53,.12); --beni:#b3372f; --beniSoft:rgba(179,55,47,.1);
+  --sakura:#f2b5c3;
+  --r:16px;
+  --sh:0 1px 0 rgba(255,255,255,.7) inset,0 10px 28px rgba(22,32,52,.09),0 2px 6px rgba(22,32,52,.05);
   --ease:cubic-bezier(.32,.72,0,1);
+  --serif:"Hiragino Mincho ProN","Hiragino Mincho Pro","Yu Mincho","YuMincho","Songti SC","STSong","Noto Serif CJK JP","Noto Serif CJK SC","Source Han Serif",serif;
+  --sans:-apple-system,"SF Pro Text","Hiragino Sans","PingFang SC","Noto Sans CJK SC",system-ui,sans-serif;
+  --blue:var(--acc2); --blue2:#4d7bb8; --green:var(--matcha); --red:var(--beni); --amber:var(--kin); --hair:var(--line);
+  --glass:var(--card);
+  color-scheme:light;
 }
-html{background:#f3f7fc}
+html{background:var(--paper)}
 body{background:transparent!important;color:var(--ink)}
-/* —— 会缓慢流动的亮色背景（纯渐变层，零滤镜，性能稳） —— */
+::selection{background:rgba(207,63,40,.22)}
+
+/* —— 和纸底：暖色渐变 + 远处淡淡的青海波 + 纤维噪点（全部静态，零滤镜动画） —— */
 body::before{
-  content:"";position:fixed;inset:-14%;z-index:-2;pointer-events:none;
+  content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
   background:
-    radial-gradient(42% 36% at 10% 6%, rgba(120,180,255,.55), rgba(120,180,255,0) 62%),
-    radial-gradient(40% 34% at 90% 2%, rgba(255,170,215,.46), rgba(255,170,215,0) 62%),
-    radial-gradient(44% 38% at 6% 94%, rgba(150,240,210,.44), rgba(150,240,210,0) 64%),
-    radial-gradient(42% 36% at 94% 90%, rgba(196,182,255,.44), rgba(196,182,255,0) 62%),
-    linear-gradient(180deg,#fdfeff,#f2f6fc 55%,#edf2fa);
-  animation:skinflow 30s ease-in-out infinite alternate;
+    radial-gradient(70% 45% at 100% 0%, rgba(160,114,42,.08), rgba(160,114,42,0) 70%),
+    radial-gradient(60% 40% at 0% 100%, rgba(31,58,96,.08), rgba(31,58,96,0) 70%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='28' viewBox='0 0 56 28'><g fill='none' stroke='%23b08a3e' stroke-opacity='.13' stroke-width='1'><path d='M0 28a28 28 0 0 1 56 0M8 28a20 20 0 0 1 40 0M16 28a12 12 0 0 1 24 0M-28 14a28 28 0 0 1 56 0M-20 14a20 20 0 0 1 40 0M-12 14a12 12 0 0 1 24 0M28 14a28 28 0 0 1 56 0M36 14a20 20 0 0 1 40 0M44 14a12 12 0 0 1 24 0'/></g></svg>") left bottom / 56px 28px repeat-x,
+    linear-gradient(180deg,#f7f8f4,var(--paper) 45%,var(--paper2));
 }
-@keyframes skinflow{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-2.2%,1.6%,0) scale(1.07)}}
-/* 极淡颗粒（静态，高级感来源） */
 body::after{
-  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.035;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/></filter><rect width='120' height='120' filter='url(%23n)'/></svg>");
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45 0 0 0 0 .32 0 0 0 0 .18 0 0 0 .9 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
 }
-/* —— 顶栏：吸顶毛玻璃 —— */
-.top{background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.68))!important;
-  border-bottom:1px solid var(--hair)!important;box-shadow:0 8px 26px rgba(16,26,44,.06)!important;
-  -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%)}
-/* —— 大面板 —— */
-.card,.flash,.link,.warn,.ans{background:var(--glass)!important;border:1px solid rgba(255,255,255,.8)!important;
-  border-radius:var(--r)!important;box-shadow:var(--sh)!important}
-/* —— 小元件（带状态守卫：选中/发音中/翻面时不要被这里覆盖） —— */
-.wc:not(.speaking),.chip:not(.on):not(.speaking),.sent:not(.speaking),.pair .side:not(.speaking){
-  background:linear-gradient(172deg,rgba(255,255,255,.9),rgba(255,255,255,.62));
-  border:1px solid rgba(255,255,255,.8);box-shadow:0 6px 18px rgba(16,26,44,.07)}
-/* 选中态（入口页 chips）：后加载的文件必须显式再写一遍，否则会被上面的规则吃掉 */
-.chip.on{background:linear-gradient(160deg,#7c5cff,#4a7cff)!important;color:#fff!important;border-color:transparent!important;
-  box-shadow:0 8px 22px rgba(124,92,255,.4)!important}
-/* 发音中/翻面：保留页面自己的高亮 */
-.wc.speaking,.chip.speaking,.sent.speaking,.pair .side.speaking{border-color:rgba(10,132,255,.55)!important}
-.flash.back{border-color:rgba(10,132,255,.4)!important;background:linear-gradient(165deg,rgba(236,245,255,.95),rgba(255,255,255,.7))!important}
-.warn{background:linear-gradient(165deg,rgba(255,250,236,.92),rgba(255,246,228,.8))!important;border-color:rgba(255,224,163,.7)!important}
-/* —— 按钮与开关 —— */
-button.act{border-radius:15px!important;font-family:inherit}
-button.primary{background:linear-gradient(180deg,var(--blue2),var(--blue))!important;color:#fff!important;
-  box-shadow:0 10px 24px rgba(10,132,255,.32)!important}
-button.ghost{background:linear-gradient(165deg,rgba(255,255,255,.86),rgba(255,255,255,.62))!important;color:var(--ink)!important;
-  border:1px solid rgba(255,255,255,.85)!important}
-.play{background:linear-gradient(180deg,#2b3a4f,#16202c)!important;color:#fff!important;border-radius:18px!important}
-.ch.on{background:linear-gradient(180deg,#27364b,#16202c)!important;color:#fff!important;border-color:transparent!important}
-.tg.on{background:linear-gradient(180deg,rgba(10,132,255,.16),rgba(10,132,255,.1))!important;color:#0a63c8!important;
-  border-color:rgba(10,132,255,.28)!important}
-.bar-h{background:rgba(118,130,152,.16)!important;border-radius:3px!important}
-.bar-h>i{background:linear-gradient(90deg,var(--blue2),var(--blue))!important}
-/* —— 输入/滑块 —— */
-input[type=range]{accent-color:var(--blue)}
-/* —— 打印：必须纯白，别把省钱 → 省墨搞砸 —— */
+
+/* —— 环境音悬浮按钮换成和风（ambient.js 自带样式，这里用更高优先级覆盖） —— */
+html #ambBtn{color:var(--ink)!important;background:var(--card)!important;border:1px solid var(--line)!important;box-shadow:0 10px 26px rgba(80,52,22,.18)!important;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html #ambBtn.on{background:var(--accSoft)!important;color:var(--acc)!important;border-color:rgba(31,58,96,.3)!important}
+html #ambSheet{background:rgba(255,251,244,.98)!important;border:1px solid var(--line)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+  box-shadow:0 20px 50px rgba(80,52,22,.22)!important}
+html .amb-hd{color:var(--ink)!important;font-family:var(--serif)}
+html .amb-chips button{background:rgba(255,255,255,.7)!important;color:var(--ink2)!important;border-color:var(--line)!important}
+html .amb-chips button.on{background:var(--accBg)!important;color:#fff!important;border-color:transparent!important}
+html .amb-vol input{accent-color:var(--shu)}
+
+input[type=range]{accent-color:var(--shu)}
+
+/* —— 打印：纯白，别浪费墨 —— */
 @media print{
   body::before,body::after{display:none!important}
   html,body{background:#fff!important}
 }
-/* —— 深色模式 —— */
+
+/* —— 深色：夜・藍墨 —— */
 @media (prefers-color-scheme:dark){
-  :root{--ink:#f2f5fa;--ink2:#a8b2c2;--ink3:#7f8899;--hair:rgba(255,255,255,.1);
-    --glass:linear-gradient(165deg,rgba(40,46,58,.86),rgba(28,33,44,.7));
-    --sh:0 1px 1px rgba(255,255,255,.05) inset,0 12px 30px rgba(0,0,0,.45)}
-  html{background:#0e1218}
+  :root:not([data-theme="light"]){
+    --paper:#0d1320; --paper2:#090e18; --solid:#161e2e; --card:rgba(22,30,46,.93); --card2:rgba(34,44,64,.6);
+    --ink:#ece8df; --ink2:#b3ada2; --ink3:#7d7870; --line:rgba(236,232,223,.11);
+    --acc:#9ab8e6; --acc2:#b4cbef; --accBg:#35598f; --accBg2:#4670ab; --accSoft:rgba(154,184,230,.12);
+    --shu:#ff6a4d; --shu2:#ff8a6e; --shuSoft:rgba(255,106,77,.14);
+    --ai:#9ab8e6; --ai2:#9ab8e6; --aiSoft:rgba(154,184,230,.12);
+    --kin:#d9b566; --matcha:#8cc47a; --matchaSoft:rgba(140,196,122,.14); --beni:#ff7b7b; --beniSoft:rgba(255,123,123,.13);
+    --sh:0 1px 0 rgba(255,255,255,.04) inset,0 12px 30px rgba(0,0,0,.45);
+    --blue2:#a9c6ef;
+    color-scheme:dark;
+  }
   body::before{
     background:
-      radial-gradient(42% 36% at 10% 6%, rgba(48,92,160,.55), rgba(48,92,160,0) 62%),
-      radial-gradient(40% 34% at 90% 2%, rgba(140,60,120,.42), rgba(140,60,120,0) 62%),
-      radial-gradient(44% 38% at 6% 94%, rgba(30,110,95,.4), rgba(30,110,95,0) 64%),
-      linear-gradient(180deg,#0e1218,#131922 55%,#0f141b)}
-  body::after{opacity:.05}
-  .top{background:linear-gradient(180deg,rgba(16,20,27,.92),rgba(16,20,27,.7))!important;border-bottom-color:rgba(255,255,255,.08)!important}
-  .wc:not(.speaking),.chip:not(.on):not(.speaking),.sent:not(.speaking),.pair .side:not(.speaking){
-    background:linear-gradient(172deg,rgba(48,55,68,.85),rgba(34,40,52,.7));border-color:rgba(255,255,255,.1)}
-  .chip.on{background:linear-gradient(160deg,#8b6bff,#4a7cff)!important;color:#fff!important}
-  .warn{background:linear-gradient(165deg,rgba(70,58,22,.7),rgba(56,46,18,.55))!important;color:#e8d59a!important;border-color:rgba(255,224,163,.25)!important}
-  button.ghost{background:linear-gradient(165deg,rgba(60,68,84,.75),rgba(44,51,64,.6))!important;color:var(--ink)!important;border-color:rgba(255,255,255,.12)!important}
-  .ch.on{background:linear-gradient(180deg,#e9eef7,#cdd6e4)!important;color:#12161d!important}
-  .tg.on{background:linear-gradient(180deg,rgba(10,132,255,.3),rgba(10,132,255,.2))!important;color:#9ecbff!important}
+      radial-gradient(70% 45% at 100% 0%, rgba(90,110,170,.16), rgba(90,110,170,0) 70%),
+      radial-gradient(60% 40% at 0% 100%, rgba(53,96,154,.22), rgba(53,96,154,0) 70%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='28' viewBox='0 0 56 28'><g fill='none' stroke='%23d9b566' stroke-opacity='.09' stroke-width='1'><path d='M0 28a28 28 0 0 1 56 0M8 28a20 20 0 0 1 40 0M16 28a12 12 0 0 1 24 0M-28 14a28 28 0 0 1 56 0M-20 14a20 20 0 0 1 40 0M-12 14a12 12 0 0 1 24 0M28 14a28 28 0 0 1 56 0M36 14a20 20 0 0 1 40 0M44 14a12 12 0 0 1 24 0'/></g></svg>") left bottom / 56px 28px repeat-x,
+      linear-gradient(180deg,#121a2a,var(--paper) 45%,var(--paper2));
+  }
+  body::after{opacity:.035}
+  html #ambSheet{background:rgba(22,29,44,.98)!important}
+  html .amb-chips button{background:rgba(255,255,255,.06)!important}
+  html .amb-chips button.on{background:#e9e1d2!important;color:#141a26!important}
 }
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

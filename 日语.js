@@ -2,7 +2,37 @@
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var ALL = WORDS.concat(LEFT_WORDS);
-  var ALLW = ALL.concat(PIC_ALL).concat(WORDS2);   // 全部词，只用于错词本查找
+  /* 全部词（只用于错词本查找）—— 含 EXTRA_SETS（第3课等后加的词组），按假名去重 */
+  var ALLW = (function () {
+    var out = [], seen = {};
+    var lists = [ALL, PIC_ALL, WORDS2];
+    (window.EXTRA_SETS || []).forEach(function (x) { lists.push(x.words || []); });
+    lists.forEach(function (l) { l.forEach(function (w) { if (w && w.k && !seen[w.k]) { seen[w.k] = 1; out.push(w); } }); });
+    return out;
+  })();
+
+  /* ---- 复习排程：默完一轮 → 自动在入口页「复习计划」里打勾（srs.js） ---- */
+  function srsIds(scope) {
+    if (scope === 'wrong' || !scope) return [];
+    if (scope === 'all') return ['right', 'left'];
+    if (scope === 'sel') {
+      var out = [];
+      selSets().forEach(function (id) { (id === 'all' ? ['right', 'left'] : [id]).forEach(function (x) { if (out.indexOf(x) < 0) out.push(x); }); });
+      return out;
+    }
+    return [scope];
+  }
+  function srsDone(scope) {
+    try { if (window.JPSRS) window.JPSRS.done(srsIds(scope)); } catch (e) {}
+  }
+
+  /* ---- 顶部副标题：词数 / 音频数实时算，不再手写 ---- */
+  (function subLine() {
+    var el = document.getElementById('subLine'); if (!el) return;
+    var n = ALLW.length, a = 0, AUDX = window.JP_AUDIO || {};
+    Object.keys(AUDX).forEach(function (k) { if (AUDX[k] && AUDX[k][0]) a++; });
+    el.textContent = '点读 · 默写 · 自测 · 浊音　·　' + n + ' 词 · 真人音 ' + a + ' 条';
+  })();
 
   /* ---- 「看图识词」多组通用：组由 词表.js 的 PIC_SETS 决定，加新组不改 JS ---- */
   function picSet(scope) {
@@ -55,7 +85,7 @@
         b.className = 'ch'; b.setAttribute('data-s', 'sel');
         box.insertBefore(b, box.firstChild);
       }
-      b.textContent = '🎯 自选 ' + n + ' 词';
+      b.textContent = '自选 ' + n + ' 词';
     });
   }
 
@@ -75,7 +105,7 @@
   var ENGINE = 0;
   var AUD = (typeof JP_AUDIO !== 'undefined') ? JP_AUDIO : {};
   var actx = null, bufCache = {}, liveSrc = [];
-  function engineLabel() { return ['🎧 真人音', '🤖 神经音', '📱 系统音'][ENGINE]; }
+  function engineLabel() { return ['真人音', '神经音', '系统音'][ENGINE]; }
   function audFile(text) {
     if (ENGINE === 2) return null;
     var e = AUD[text]; if (!e) return null;
@@ -275,7 +305,7 @@
       '<div class="k">' + esc(w.k) + '</div>' +
       '<div class="j">' + (w.j ? esc(w.j) + '　' + esc(w.a) : esc(w.a)) + '</div>' +
       '<div class="c">' + esc(w.c) + '</div>' +
-      '<div class="tip">💡 ' + esc(w.t) + '</div></div>';
+      '<div class="tip">' + esc(w.t) + '</div></div>';
   }
 
   function renderRead() {
@@ -355,7 +385,7 @@
     }
     var i = 0, gap = rd.slow ? 3000 : 2100;
     (function step() {
-      if (i >= list.length) { rdChain = null; return; }
+      if (i >= list.length) { rdChain = null; if (rd.scope === 'sent') srsDone('sent'); return; }
       var it = list[i];
       var el = document.querySelector('#rdView [data-i="' + i + '"]');
       speak(it.say, el, rd.slow, rd.dbl, $('rdNow'));
@@ -412,11 +442,11 @@
     $('dcKana').textContent = w.k;
     $('dcKanji').textContent = w.j ? (w.j + '　' + w.a) : ('（' + w.a + '）');
     $('dcMean').textContent = w.c;
-    $('dcTipv').textContent = '💡 ' + w.t;
+    $('dcTipv').textContent = w.t;
     var im = $('dcImg');
     if (dc.pic && w.img) {
       im.innerHTML = '<img src="' + esc(w.img) + '" alt="">' +
-        '<div class="lb">📷 看图 → 说出 / 写出日语</div>';
+        '<div class="lb">看图 → 说出 / 写出日语</div>';
       im.classList.remove('hide');
     } else { im.innerHTML = ''; im.classList.add('hide'); }
     $('dcAns').classList.remove('show');
@@ -450,10 +480,11 @@
     try {
       localStorage.setItem('jp_last_' + dc.scope, JSON.stringify({ ok: dc.ok, tot: tot, t: Date.now() }));
     } catch (e) {}
+    if (dc.round === 1) srsDone(dc.scope);
     var box = $('dcWrongBox');
     if (!dc.wrong.length) {
       box.innerHTML = '<div style="color:#0f7a41;font-weight:700;text-align:center">' +
-        (dc.round === 1 ? '🎉 全对！这一页可以收了' : '✅ 错词全清！可以收工') + '</div>';
+        (dc.round === 1 ? '全对，这一页可以收了' : '错词全清，可以收工') + '</div>';
       $('dcReW').classList.add('hide');
     } else {
       box.innerHTML = '<div style="color:#5b6270">本轮错词（' + dc.wrong.length + ' 个）：</div>' +
@@ -515,13 +546,13 @@
     var ov = document.createElement('div'); ov.id = 'warmOv';
     ov.style.cssText = 'position:fixed;inset:0;background:#12202d;color:#fff;z-index:99;' +
       'display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center';
-    ov.innerHTML = '<div style="font-size:13px;opacity:.6">👂 听读热身 · ' + scopeName() + ' · 共 ' + warm.list.length + ' 词</div>' +
+    ov.innerHTML = '<div style="font-size:13px;opacity:.6">听读热身 · ' + scopeName() + ' · 共 ' + warm.list.length + ' 词</div>' +
       '<div id="wKana" style="font-size:46px;font-weight:800;margin:26px 0;letter-spacing:2px">—</div>' +
       '<div id="wMean" style="font-size:17px;color:#8fd0ff;min-height:24px"></div>' +
       '<div id="wCnt" style="font-size:13px;opacity:.6;margin-top:14px"></div>' +
       '<div style="display:flex;gap:10px;margin-top:26px">' +
-      '<button id="wkRe" style="background:#2b3f52;color:#fff;border:0;border-radius:12px;padding:12px 18px;font-size:16px">🔊 再听</button>' +
-      '<button id="wkStop" style="background:#e35555;color:#fff;border:0;border-radius:12px;padding:12px 18px;font-size:16px">⏹ 结束</button></div>';
+      '<button id="wkRe" style="background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:12px;padding:12px 18px;font-size:16px">再听一遍</button>' +
+      '<button id="wkStop" style="background:#c23b22;color:#fff;border:0;border-radius:12px;padding:12px 18px;font-size:16px">结束</button></div>';
     document.body.appendChild(ov);
     $('wkRe').onclick = function () { speak(warm.list[warm.i].k, null, dc.slow, false, null); };
     $('wkStop').onclick = stopWarm;
@@ -575,8 +606,9 @@
     cd.flipped = false;
     cdUI();
     if (!cd.queue.length) {
-      $('cdQ').textContent = cd.badList.length ? ('还有 ' + cd.badList.length + ' 个不会') : '🎉 这一轮全过';
-      $('cdHint').textContent = cd.badList.length ? '点下面「✕ 只练不会的」再来一轮' : '可以去做听读默写了';
+      if (cd.total && !cd.recorded) { cd.recorded = true; srsDone(cd.scope); }
+      $('cdQ').textContent = cd.badList.length ? ('还有 ' + cd.badList.length + ' 个不会') : '这一轮全过';
+      $('cdHint').textContent = cd.badList.length ? '点下面「只练不会的」再来一轮' : '可以去做听读默写了';
       return;
     }
     var w = cd.queue[0];
@@ -598,7 +630,7 @@
     $('cdA2').textContent = a[1];
     $('cdA1').classList.remove('hide');
     $('cdA2').classList.remove('hide');
-    $('cdHint').textContent = '💡 ' + w.t;
+    $('cdHint').textContent = w.t;
   }
   function cdMark(knew) {
     var w = cd.queue[0]; if (!w) return;
@@ -615,7 +647,7 @@
   function cdStart(list, reset) {
     cd.queue = cd.shuf ? shuffleArr(list.slice()) : list.slice();
     cd.total = cd.queue.length;
-    if (reset) { cd.ok = 0; cd.no = 0; cd.badList = []; }
+    if (reset) { cd.ok = 0; cd.no = 0; cd.badList = []; cd.recorded = false; }
     cdShow();
   }
   document.querySelectorAll('#cdScope .ch').forEach(function (b) {
@@ -665,7 +697,7 @@
       var bad = wrongStore.indexOf(w.k) >= 0;
       h += '<tr><td><b>' + esc(w.k) + '</b>' + (w.j ? '　' + esc(w.j) : '') +
         '<div style="font-size:12px;color:#c0392b">' + esc(w.c) + '</div></td>' +
-        '<td class="s">' + (bad ? '❌ 不会' : '—') + '</td></tr>';
+        '<td class="s">' + (bad ? '不会' : '—') + '</td></tr>';
     });
     h += '</table>';
     t.innerHTML = h; t.classList.remove('hide');
@@ -827,7 +859,7 @@
       if (!worst || s.ok / s.n < worst.p) worst = { g: g, n: s.n, ok: s.ok, p: s.ok / s.n };
     });
     if (worst && tot >= 6) {
-      $('dkEarRow').innerHTML = '🔎 最弱：<b>' + esc(worst.g) + '</b>　' + worst.ok + '/' + worst.n +
+      $('dkEarRow').innerHTML = '最弱：<b>' + esc(worst.g) + '</b>　' + worst.ok + '/' + worst.n +
         '（' + Math.round(worst.p * 100) + '%）—— 这一组单独多念几遍';
     } else {
       $('dkEarRow').textContent = '30 对最小对立 · 每个音都要 ≥90% 才算耳朵过关';
@@ -850,7 +882,7 @@
     if (!dkEar.stat[g]) dkEar.stat[g] = { n: 0, ok: 0 };
     dkEar.stat[g].n++;
     if (ok) { dkEar.ok++; dkEar.stat[g].ok++; }
-    else { dkEar.no++; dkToast('❌ 正确答案是 ' + dkEar.q + '　再听一遍'); }
+    else { dkEar.no++; dkToast('正确答案是 ' + dkEar.q + '，再听一遍'); }
     speak(dkEar.q, null, false, false, null);
     [$('dkOptA'), $('dkOptB')].forEach(function (b) {
       var isRight = b.dataset.v === dkEar.q;
@@ -859,8 +891,8 @@
       else dkOpt(b, 'ghost', b.dataset.v);
     });
     var qLab = dkEar.q === dkEar.cur.a ? (dkEar.cur.la || '') : (dkEar.cur.lb || '');
-    $('dkEarMsg').textContent = ok ? '✅ 对 —— ' + dkEar.q + '：' + qLab
-                                   : '❌ 你选的是 ' + v + '，实际是 ' + dkEar.q + '（' + qLab + '）';
+    $('dkEarMsg').textContent = ok ? '对：' + dkEar.q + '，' + qLab
+                                   : '你选的是 ' + v + '，实际是 ' + dkEar.q + '（' + qLab + '）';
     dkEarUI();
     dkEar.timer = setTimeout(dkEarNext, ok ? 900 : 1700);
   }
@@ -915,7 +947,7 @@
       : (it.kind === 'sei' ? (it.v + '（' + d.rs + '）清音 · 不振　↔ ' + d.k)
                            : (d.r + '　' + d.s + ' → ' + d.k));
     $('dkMean').textContent = it.kind === 'word' ? '' : d.h;
-    $('dkTipv').textContent = d.t ? ('⚠️ ' + d.t)
+    $('dkTipv').textContent = d.t ? ('注意：' + d.t)
       : (it.kind === 'sei' ? '清音：声带不振动（近似汉语的 k／t／s）' : '浊音：手贴喉头，要有振感');
     $('dkAns').classList.remove('show');
     $('dkTbar').style.display = 'none';
@@ -946,7 +978,7 @@
     else { dkD.no++; dkD.wrong.push(it); dkWset(d.k); }
     if (tmo) {
       $('dkAns').classList.add('show');
-      $('dkTipv').textContent = '⏱ 1.5 秒没认出来 —— 这一格还没自动化，回去多念几遍';
+      $('dkTipv').textContent = '1.5 秒没认出来，这一格还没形成反射，回去多念几遍';
       $('dkTbar').style.display = 'none';
     }
     dkD.pos++;
@@ -962,6 +994,7 @@
   }
   function dkDFinish() {
     dkD.running = false;
+    if (dkD.round === 1 && dkD.scope !== 'wrong') srsDone('daku');
     if (dkD.t) { clearTimeout(dkD.t); dkD.t = null; }
     $('dkTbar').style.display = 'none';
     hush(null);
@@ -972,14 +1005,14 @@
     if (dkD.react.length) {
       var s = 0; dkD.react.forEach(function (r) { s += r; });
       var avg = s / dkD.react.length;
-      extra = '　平均反应 ' + (avg / 1000).toFixed(2) + 's' + (dkD.timer ? (avg <= 1200 ? '（⚡ 已自动化）' : '（还慢，再刷）') : '');
+      extra = '　平均反应 ' + (avg / 1000).toFixed(2) + 's' + (dkD.timer ? (avg <= 1200 ? '（已经形成反射）' : '（还慢，再刷）') : '');
     }
     $('dkDetail').textContent = '第 ' + dkD.round + ' 轮 · 正确率 ' +
       (tot ? Math.round(dkD.ok / tot * 100) : 0) + '%' + extra;
     var box = $('dkWrongBox');
     if (!dkD.wrong.length) {
       box.innerHTML = '<div style="color:#0f7a41;font-weight:700;text-align:center">' +
-        (dkD.round === 1 ? '🎉 全对！' : '✅ 错的全清了，可以收工') + '</div>';
+        (dkD.round === 1 ? '全对' : '错的全清了，可以收工') + '</div>';
       $('dkReW').classList.add('hide');
     } else {
       box.innerHTML = '<div style="color:#5b6270">这轮错的（' + dkD.wrong.length + ' 个）：</div>' +
@@ -1038,12 +1071,12 @@
   };
   $('dkTimer').onclick = function () {
     dkD.timer = !dkD.timer; this.classList.toggle('on', dkD.timer);
-    dkToast(dkD.timer ? '⚡ 限时：播完 1.5 秒内没点「✅ 认出来了」就算错' : '✍️ 听写：听到→写在纸上→对答案');
+    dkToast(dkD.timer ? '限时：播完 1.5 秒内没点「写对了」就算错' : '听写：听到 → 写在纸上 → 对答案');
   };
   $('dkSlow2').onclick = function () { dkD.slow = !dkD.slow; this.classList.toggle('on', dkD.slow); };
   $('dkWord').onclick = function () {
     dkD.word = !dkD.word; this.classList.toggle('on', dkD.word);
-    this.textContent = dkD.word ? '🔤 听例词中' : '🔤 改为听例词';
+    this.innerHTML = JPI('type') + (dkD.word ? '听例词中' : '改为听例词');
     $('dkMix').classList.toggle('on', dkD.mix && !dkD.word);
     dkD.running = false; $('dkQuiz').classList.add('hide'); $('dkDone').classList.add('hide'); dkDUI();
   };
@@ -1056,7 +1089,7 @@
     var l = dkPool('wrong');
     if (!l.length) { alert('浊音错词本还是空的 —— 先做一轮听写，错的会自动记下来。'); return; }
     dkD.scope = 'wrong'; dkD.word = false;
-    $('dkWord').textContent = '🔤 改为听例词'; $('dkWord').classList.remove('on');
+    $('dkWord').innerHTML = JPI('type') + '改为听例词'; $('dkWord').classList.remove('on');
     document.querySelectorAll('#dkScopeD .ch').forEach(function (x) {
       x.classList.toggle('on', x.getAttribute('data-s') === 'wrong');
     });
@@ -1068,7 +1101,7 @@
     if (!dkD.running) return;
     var dt = dkD.t0 ? (Date.now() - dkD.t0) : 0;
     dkD.react.push(dt);
-    dkToast('⚡ ' + (dt / 1000).toFixed(2) + 's');
+    dkToast('反应 ' + (dt / 1000).toFixed(2) + ' 秒');
     dkMark(true);
   };
   $('dkNoBtn').onclick = function () { dkMark(false, false); };
@@ -1122,7 +1155,7 @@
     var bs = document.querySelectorAll('.engbtn');
     if (!bs.length) return;
     function paint() {
-      bs.forEach(function (b) { b.textContent = engineLabel(); b.classList.toggle('on', ENGINE !== 2); });
+      bs.forEach(function (b) { b.innerHTML = JPI('headphones') + engineLabel(); b.classList.toggle('on', ENGINE !== 2); });
     }
     bs.forEach(function (b, i) {
       b.onclick = function () { ENGINE = (ENGINE + 1) % 3; paint(); hush(null); };

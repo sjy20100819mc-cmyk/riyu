@@ -4,6 +4,10 @@
   var LIST = window.JP_AMBIENT || [];
   if (!LIST.length) return;
   var DIR = 'audio_ambient/';
+  /* 图标用 icons.js 的线条图标；标签里哪怕带了符号也剥掉，只留中文 */
+  var ICON = { rain: 'rain', waves: 'wave', wind: 'wind', fire: 'fire', birds: 'bird', cafe: 'cafe', white: 'noise' };
+  function ic(name) { return window.JPI ? window.JPI(name) : ''; }
+  function nameOf(x) { return String(x.label || x.key).replace(/^[^\u4e00-\u9fa5A-Za-z]+/, ''); }
   var KEY = 'jp_amb';
 
   var st = { on: true, vol: 0.55, sel: [] };
@@ -73,16 +77,16 @@
   var ui = document.createElement('div');
   ui.id = 'ambWrap';
   ui.innerHTML =
-    '<button id="ambBtn" aria-label="环境音"><span id="ambIco">🎧</span></button>' +
+    '<button id="ambBtn" aria-label="环境音"><span id="ambIco"></span></button>' +
     '<div id="ambSheet" class="hide">' +
-      '<div class="amb-hd"><b>环境音</b><button id="ambClose">✕</button></div>' +
+      '<div class="amb-hd"><b>环境音</b><button id="ambClose" aria-label="关闭">关闭</button></div>' +
       '<div class="amb-chips" id="ambChips"></div>' +
       '<div class="amb-vol"><span>音量</span><input id="ambVol" type="range" min="0" max="100" value="55"></div>' +
       '<div class="amb-ft"><button id="ambAllOff">全部停</button><span id="ambTip">可多选叠加 · 边默边听</span></div>' +
     '</div>';
   var css = document.createElement('style');
   css.textContent = [
-    '#ambWrap{position:fixed;right:14px;bottom:104px;z-index:60;font-family:-apple-system,"PingFang SC",sans-serif}',
+    '#ambWrap{position:fixed;right:14px;bottom:104px;z-index:60;font-family:-apple-system,"PingFang SC",sans-serif}#ambBtn{display:grid;place-items:center;color:inherit}#ambIco{display:grid;place-items:center;font-size:22px;line-height:1}.amb-chips button{display:inline-flex;align-items:center;gap:5px}.amb-chips svg.ic{font-size:14px}',
     '#ambBtn{width:52px;height:52px;border-radius:50%;border:1px solid rgba(255,255,255,.8);font-size:22px;',
     'background:linear-gradient(160deg,rgba(255,255,255,.92),rgba(255,255,255,.66));backdrop-filter:blur(18px) saturate(180%);',
     '-webkit-backdrop-filter:blur(18px) saturate(180%);box-shadow:0 10px 26px rgba(16,26,44,.18);transition:transform .2s cubic-bezier(.32,.72,0,1)}',
@@ -117,7 +121,7 @@
     var chips = ui.querySelector('#ambChips');
     LIST.forEach(function (x) {
       var b = document.createElement('button');
-      b.setAttribute('data-k', x.key); b.textContent = x.label;
+      b.setAttribute('data-k', x.key); b.innerHTML = ic(ICON[x.key] || 'noise') + '<span>' + nameOf(x) + '</span>';
       if (st.sel.indexOf(x.key) >= 0) b.classList.add('on');
       b.onclick = function () {
         var i = st.sel.indexOf(x.key);
@@ -149,7 +153,7 @@
     var on = st.on && st.sel.length > 0;
     ui.querySelector('#ambBtn').classList.toggle('on', on);
     var first = LIST.filter(function (x) { return x.key === st.sel[0]; })[0];
-    ui.querySelector('#ambIco').textContent = on && first ? first.label.split(' ')[0] : '🎧';
+    ui.querySelector('#ambIco').innerHTML = ic(on && first ? (ICON[first.key] || 'headphones') : 'headphones') || '音';
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
 
