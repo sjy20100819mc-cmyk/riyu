@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>日语 · 今天默什么</title>
+<link rel="stylesheet" href="skin.css?v=2">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;padding:0 16px 176px;
+  font:16px/1.45 -apple-system,"SF Pro Text","PingFang SC",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased}
+
+/* ---------- 顶栏 ---------- */
+.top{position:sticky;top:0;z-index:40;margin:0 -16px 20px;padding:16px 18px 12px;border-radius:0 0 26px 26px}
+.top .r1{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.top h1{margin:0;font-size:18px;font-weight:700;letter-spacing:.5px}
+.top h1 span{background:linear-gradient(92deg,#0a84ff,#7c5cff 55%,#22b8cf);-webkit-background-clip:text;background-clip:text;color:transparent}
+.top .day{font-size:11.5px;color:var(--ink3);font-weight:600;font-variant-numeric:tabular-nums}
+.top .r2{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:650;color:var(--ink2);
+  padding:6px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.85);
+  background:linear-gradient(165deg,rgba(255,255,255,.86),rgba(255,255,255,.62));
+  box-shadow:0 4px 12px rgba(16,26,44,.07)}
+.pill.fire{color:#b45c00;border-color:rgba(255,196,120,.8);background:linear-gradient(160deg,rgba(255,232,196,.95),rgba(255,244,224,.8))}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;border-radius:28px;padding:22px 20px 18px;margin-bottom:20px;overflow:hidden;
+  background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.74));
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 22px 50px rgba(16,26,44,.14),0 1px 0 rgba(255,255,255,.9) inset}
+.hero::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.2px;pointer-events:none;
+  background:linear-gradient(120deg,#7ab6ff,#a78bfa 40%,#f0a6d0 70%,#7ee0c9);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.9}
+.hero::after{content:"";position:absolute;width:70%;height:80%;left:15%;bottom:-56%;pointer-events:none;
+  background:radial-gradient(circle,rgba(150,180,255,.4),rgba(150,180,255,0) 70%)}
+.lbl{font-size:11.5px;letter-spacing:1.6px;color:var(--ink3);font-weight:700}
+.hero .num{display:flex;align-items:baseline;gap:9px;margin:8px 0 4px;position:relative;z-index:2;transform-origin:left center}
+.hero .num.pop{animation:numpop .4s var(--ease)}
+@keyframes numpop{0%{transform:scale(.88)}58%{transform:scale(1.07)}100%{transform:none}}
+.hero .num i{font-style:normal;font-size:64px;line-height:1;font-weight:760;letter-spacing:-2.5px;font-variant-numeric:tabular-nums;
+  background:linear-gradient(180deg,#0a84ff,#7c5cff 70%,#22b8cf);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .num span{font-size:15px;color:var(--ink2);font-weight:600}
+.hero .meta{font-size:12.5px;color:var(--ink2);position:relative;z-index:2}
+.today{margin-top:12px;padding:12px 13px;border-radius:18px;position:relative;z-index:2;
+  background:linear-gradient(160deg,rgba(236,244,255,.95),rgba(244,240,255,.9));
+  border:1px solid rgba(140,170,255,.4);display:flex;align-items:center;gap:10px}
+.today .em{font-size:22px}
+.today .tx{flex:1;font-size:12.5px;color:var(--ink2);line-height:1.5}
+.today .tx b{display:block;font-size:15px;color:#12203a;margin-bottom:2px}
+.today button{border:0;border-radius:13px;padding:11px 13px;white-space:nowrap;color:#fff;font:700 12.5px/1 inherit;font-family:inherit;
+  background:linear-gradient(180deg,#4aa3ff,#0a84ff);box-shadow:0 8px 20px rgba(10,132,255,.34);transition:transform .18s var(--ease)}
+.today button:active{transform:scale(.96)}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;position:relative;z-index:2}
+.chip{display:inline-flex;align-items:center;gap:6px;font:650 11.5px/1 inherit;font-family:inherit;
+  color:#33415c;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.9);
+  background:linear-gradient(165deg,rgba(255,255,255,.9),rgba(255,255,255,.66));
+  box-shadow:0 4px 14px rgba(16,26,44,.08);transition:transform .2s var(--ease),box-shadow .25s,background .25s}
+.chip:active{transform:scale(.95)}
+.chip.on{color:#fff;border-color:transparent;background:linear-gradient(160deg,#7c5cff,#4a7cff);box-shadow:0 8px 22px rgba(124,92,255,.4)}
+.chip .dot{width:6px;height:6px;border-radius:50%;background:#ff9f0a;box-shadow:0 0 8px #ff9f0a;animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.roll{margin-top:14px;display:flex;align-items:center;gap:10px;position:relative;z-index:2;
+  border-top:1px dashed rgba(11,18,32,.1);padding-top:13px}
+.roll .w{flex:1;font-size:12.5px;color:var(--ink2);min-height:19px}
+.roll .w b{color:var(--ink);font-size:17px;margin-right:6px}
+.roll button{border:1px solid rgba(255,255,255,.9);background:linear-gradient(165deg,rgba(255,255,255,.9),rgba(255,255,255,.66));
+  color:var(--ink);font:650 12px/1 inherit;font-family:inherit;padding:10px 13px;border-radius:12px;
+  box-shadow:0 4px 14px rgba(16,26,44,.08);transition:transform .18s var(--ease)}
+.roll button:active{transform:scale(.95)}
+
+/* ---------- Bento ---------- */
+.sec{display:flex;align-items:baseline;justify-content:space-between;margin:20px 2px 12px}
+.sec h2{margin:0;font-size:12px;font-weight:700;letter-spacing:1.4px;color:var(--ink3)}
+.sec button{border:0;background:none;color:#2f6bd8;font:650 12px/1 inherit;font-family:inherit;padding:4px}
+.bento{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.tile{position:relative;overflow:hidden;text-align:left;border-radius:20px;padding:14px 14px 13px;
+  background:linear-gradient(162deg,rgba(255,255,255,.95),rgba(255,255,255,.74));
+  border:1px solid rgba(255,255,255,.95);box-shadow:0 12px 30px rgba(16,26,44,.1);
+  transition:transform .26s var(--ease),box-shadow .3s,border-color .3s}
+.tile:active{transform:scale(.965)}
+.tile.wide{grid-column:span 2}
+.tile .glow{position:absolute;width:130px;height:130px;right:-46px;top:-56px;border-radius:50%;pointer-events:none;opacity:.5}
+.tile .orb{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;
+  border:1px solid rgba(255,255,255,.9);box-shadow:0 6px 16px rgba(16,26,44,.12)}
+.tile .nm{font-size:15px;font-weight:680;margin-top:10px;letter-spacing:.2px;color:var(--ink)}
+.tile .ct{font-size:11.5px;color:var(--ink3);margin-top:3px}
+.tile .ring{position:absolute;right:12px;top:12px;width:40px;height:40px}
+.tile .ring svg{transform:rotate(-90deg)}
+.tile .ring span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:750;color:var(--ink2);font-variant-numeric:tabular-nums}
+.tile .badge{display:inline-block;font-size:10.5px;font-weight:750;border-radius:7px;padding:2px 7px;margin-right:5px}
+.badge.err{color:#b4232a;background:rgba(229,72,77,.14)}
+.badge.ok{color:#0b7a46;background:rgba(15,159,90,.14)}
+.badge.warn{color:#8a6400;background:rgba(200,137,10,.16)}
+.badge.today{color:#fff;background:linear-gradient(160deg,#ff9f0a,#ff7a00)}
+.tile.on{border-color:rgba(124,92,255,.7);box-shadow:0 18px 40px rgba(124,92,255,.26),0 0 0 1.5px rgba(124,92,255,.5) inset}
+.tile .tick{position:absolute;left:12px;top:12px;width:24px;height:24px;border-radius:50%;display:none;
+  align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;
+  background:linear-gradient(160deg,#8b6bff,#4a7cff);box-shadow:0 6px 16px rgba(124,92,255,.5)}
+.tile.on .tick{display:flex;animation:pop .34s var(--ease)}
+.tile.on .orb{visibility:hidden}
+@keyframes pop{0%{transform:scale(.5)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+.bento.need{animation:shake .34s ease-in-out 2}
+@keyframes shake{0%,100%{transform:none}25%{transform:translate3d(-5px,0,0)}75%{transform:translate3d(5px,0,0)}}
+
+/* ---------- Dock ---------- */
+.dockwrap{position:fixed;left:0;right:0;bottom:0;z-index:50;padding:12px 16px 20px;
+  background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.82) 45%,#fff)}
+.dock{display:flex;gap:8px;align-items:center;border-radius:22px;padding:9px;
+  background:linear-gradient(160deg,rgba(255,255,255,.95),rgba(255,255,255,.72));
+  -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(255,255,255,.95);box-shadow:0 16px 40px rgba(16,26,44,.16)}
+.dock .mini{flex:1;border:1px solid rgba(255,255,255,.9);border-radius:14px;padding:13px 4px;color:#41506b;
+  font:650 12.5px/1 inherit;font-family:inherit;background:linear-gradient(165deg,rgba(255,255,255,.9),rgba(255,255,255,.66));
+  transition:transform .18s var(--ease)}
+.dock .mini:active{transform:scale(.95)}
+.go{position:relative;flex:1.7;border:0;border-radius:16px;padding:15px 8px;color:#fff;font:750 14px/1 inherit;
+  font-family:inherit;white-space:nowrap;background:linear-gradient(120deg,#4aa3ff,#7c5cff 60%,#3ec7d8);
+  box-shadow:0 14px 32px rgba(74,124,255,.4);transition:transform .18s var(--ease)}
+.go:active{transform:scale(.97)}
+.foot{text-align:center;font-size:11px;color:var(--ink3);line-height:1.9;margin:24px 0 8px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="r1"><h1>日<span>语</span></h1><div class="day" id="day">—</div></div>
+  <div class="r2">
+    <span class="pill fire" id="streak">🔥 连续 1 天</span>
+    <span class="pill" id="mastery">掌握度 —</span>
+    <span class="pill" id="todayPill">📌 今天到期 0</span>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="lbl">今天要默</div>
+  <div class="num"><i id="cnt">0</i><span>词</span></div>
+  <div class="meta" id="meta">点下面的卡片选择范围（可多选）</div>
+  <div class="today" id="todayCard" style="display:none">
+    <div class="em">🎯</div>
+    <div class="tx"><b id="todayName">—</b><span id="todayMeta">—</span></div>
+    <button id="todayGo">开默</button>
+  </div>
+  <div class="chips" id="dueChips"></div>
+  <div class="roll">
+    <div class="w" id="rollw">🎲 抽一个词，先热热嘴（右下角可开环境音）</div>
+    <button id="rollBtn">抽一个</button>
+  </div>
+</div>
+
+<div class="sec"><h2>选范围</h2><span><button id="allBtn">全选</button><button id="clrBtn">清空</button></span></div>
+<div class="bento" id="tiles"></div>
+
+<div class="foot">真人音 Forvo · 神经音 Nanami · 环境音 7 种可叠 · 全部离线</div>
+
+<div class="dockwrap">
+  <div class="dock">
+    <button class="mini" data-mode="read">📖 点读</button>
+    <button class="mini" data-mode="card">🃏 自测</button>
+    <button class="go" data-mode="dict">🎧 开始默写</button>
+    <button class="mini" data-mode="daku">⚡ 浊音</button>
+  </div>
+</div>
+
+<script src="%E8%AF%8D%E8%A1%A8.js?v=0923j"></script>
+<script src="%E5%A4%8D%E4%B9%A0%E6%8E%92%E7%A8%8B.js?v=09272143"></script>
+<script src="%E9%9F%B3%E9%A2%91%E7%B4%A2%E5%BC%95.js?v=0923j"></script>
+<script src="ambient_data.js?v=1"></script>
+<script src="ambient.js?v=1"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var TOOL = '%E6%97%A5%E8%AF%AD.html';
+  var APP = window.JP_AUDIO || {};
+
+  /* ---------------- 范围（含第3课左右半边） ---------------- */
+  var SETS = [];
+  (window.PIC_SETS || []).forEach(function (s, i) {
+    SETS.push({ id: s.id, em: i ? '🖼' : '📷', c1: '124,92,255',
+                nm: s.label.replace(/^[^\u4e00-\u9fa5A-Za-z]*/, '').replace(/\s*\d+\s*词$/, '') || s.id,
+                words: s.words, mode: 'dict' });
+  });
+  (window.EXTRA_SETS || []).forEach(function (x) {
+    SETS.push({ id: x.id, em: '📖', c1: '10,132,255',
+                nm: x.label.replace(/^[^\u4e00-\u9fa5A-Za-z]*/, '').replace(/\s*\d+\s*词$/, '') || x.id,
+                words: x.words, mode: 'dict' });
+  });
+  SETS.push({ id: 'w2',    em: '📚', c1: '52,199,120',  nm: '生词表 2',   words: WORDS2, mode: 'dict' });
+  SETS.push({ id: 'right', em: '📗', c1: '34,184,238',  nm: '右栏',       words: WORDS,  mode: 'dict' });
+  SETS.push({ id: 'left',  em: '📘', c1: '74,124,255',  nm: '左栏',       words: LEFT_WORDS, mode: 'dict' });
+  SETS.push({ id: 'all',   em: '📙', c1: '255,159,10',  nm: '全表混合',   words: WORDS.concat(LEFT_WORDS), mode: 'dict' });
+  SETS.push({ id: 'daku',  em: '⚡', c1: '250,204,21',  nm: '浊音·半浊音',
+              words: (window.DAKU || []).map(function (d) { return { k: d.k }; }), mode: 'daku' });
+  SETS.push({ id: 'sent',  em: '💬', c1: '167,139,250', nm: '例句·语法',
+              words: (window.SENTENCES || []).map(function (s) { return { k: s.ja }; }), mode: 'read', solo: true });
+
+  function wordsOf(id) { for (var i = 0; i < SETS.length; i++) if (SETS[i].id === id) return SETS[i].words; return []; }
+  function setOf(id) { for (var i = 0; i < SETS.length; i++) if (SETS[i].id === id) return SETS[i]; return null; }
+
+  var wrong = [], dakuWrong = [], sel = [];
+  try { wrong = JSON.parse(localStorage.getItem('jp_wrong_k') || '[]') || []; } catch (e) {}
+  try { dakuWrong = JSON.parse(localStorage.getItem('jp_daku_k') || '[]') || []; } catch (e) {}
+  try { sel = JSON.parse(localStorage.getItem('jp_sel') || '[]') || []; } catch (e) {}
+  sel = sel.filter(function (id) { return id !== 'sent'; });
+
+  var d = new Date();
+  var iki = function (n) { return (n < 10 ? '0' : '') + n; };
+  $('day').textContent = (d.getMonth() + 1) + '月' + d.getDate() + '日 · 周' + '日一二三四五六'[d.getDay()];
+
+  /* ---------------- 连续天数 ---------------- */
+  (function streak() {
+    var days = [];
+    try { days = JSON.parse(localStorage.getItem('jp_days') || '[]') || []; } catch (e) {}
+    var today = d.getFullYear() + '-' + iki(d.getMonth() + 1) + '-' + iki(d.getDate());
+    if (days.indexOf(today) < 0) { days.push(today); if (days.length > 90) days = days.slice(-90); }
+    try { localStorage.setItem('jp_days', JSON.stringify(days)); } catch (e) {}
+    var n = 1, t = new Date(d.getTime());
+    for (var k = 1; k < 90; k++) {
+      t.setDate(t.getDate() - 1);
+      var s2 = t.getFullYear() + '-' + iki(t.getMonth() + 1) + '-' + iki(t.getDate());
+      if (days.indexOf(s2) >= 0) n++; else break;
+    }
+    $('streak').textContent = '🔥 连续 ' + n + ' 天';
+  })();
+
+  /* ---------------- 卡片 ---------------- */
+  var SCHED = window.JP_SCHED || { due: [], late: [], lateN: 0 };
+  var dueIds = SCHED.due.map(function (x) { return x.setId; });
+
+  function last(scope) {
+    try { var o = JSON.parse(localStorage.getItem('jp_last_' + scope) || 'null'); return o && o.tot ? o : null; } catch (e) { return null; }
+  }
+  SETS.forEach(function (s, idx) {
+    var el = document.createElement('div');
+    el.className = 'tile' + (idx === 0 ? ' wide' : '');
+    el.setAttribute('data-id', s.id);
+    var book = (s.id === 'daku' ? dakuWrong : wrong);
+    var errs = s.words.filter(function (w) { return book.indexOf(w.k) >= 0; }).length;
+    var total = s.words.length, good = total ? (total - errs) / total : 0;
+    var R = 16, C = 2 * Math.PI * R, off = C * (1 - good);
+    var lg = last(s.id), isDue = dueIds.indexOf(s.id) >= 0;
+    el.innerHTML =
+      '<div class="glow" style="background:radial-gradient(circle,rgba(' + s.c1 + ',.55),rgba(' + s.c1 + ',0) 70%)"></div>' +
+      '<div class="tick">✓</div>' +
+      '<div class="orb" style="background:linear-gradient(160deg,rgba(' + s.c1 + ',.28),rgba(' + s.c1 + ',.06))">' + s.em + '</div>' +
+      '<div class="nm">' + s.nm + (s.solo ? ' <span style="font-size:10.5px;color:#8b94a3">单练</span>' : '') + '</div>' +
+      '<div class="ct">' + total + ' ' + (s.id === 'daku' ? '音' : (s.id === 'sent' ? '句' : '词')) +
+        (isDue ? ' · <span class="badge today">今天默</span>' : '') +
+        (errs ? ' <span class="badge err">错 ' + errs + '</span>' : '') +
+        (lg ? ' <span class="badge warn">上次 ' + lg.ok + '/' + lg.tot + '</span>' : '') + '</div>' +
+      '<div class="ring"><svg width="40" height="40">' +
+        '<circle cx="20" cy="20" r="' + R + '" fill="none" stroke="rgba(11,18,32,.1)" stroke-width="3"/>' +
+        '<circle cx="20" cy="20" r="' + R + '" fill="none" stroke="rgb(' + s.c1 + ')" stroke-width="3" ' +
+          'stroke-linecap="round" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '"/>' +
+      '</svg><span>' + Math.round(good * 100) + '%</span></div>';
+    el.onclick = function () {
+      if (s.solo) { location.href = TOOL + '?mode=' + (s.mode || 'read') + '&set=' + s.id; return; }
+      toggle(s.id);
+    };
+    $('tiles').appendChild(el);
+  });
+
+  function toggle(id) {
+    var i = sel.indexOf(id);
+    if (i >= 0) sel.splice(i, 1); else sel.push(id);
+    save(); renderDue(); paint();
+  }
+  function cleanSel() {
+    sel = sel.filter(function (id) { var t = setOf(id); return t && !t.solo; });
+  }
+  function save() { cleanSel(); try { localStorage.setItem('jp_sel', JSON.stringify(sel)); } catch (e) {} }
+
+  function selWords() {
+    var out = [], seen = {};
+    sel.forEach(function (id) {
+      wordsOf(id).forEach(function (w) { if (w && w.k && !seen[w.k]) { seen[w.k] = 1; out.push(w); } });
+    });
+    return out;
+  }
+
+  /* ---------------- 绘制 ---------------- */
+  var shown = -1;
+  function countTo(n) {
+    var el = $('cnt');
+    el.textContent = n;                       // 直接给终值，不依赖 rAF
+    if (shown === n) return;
+    shown = n;
+    var host = el.parentElement;
+    host.classList.remove('pop'); void host.offsetWidth; host.classList.add('pop');
+  }
+  function paint() {
+    document.querySelectorAll('.tile').forEach(function (t) {
+      var id = t.getAttribute('data-id');
+      var sd = setOf(id);
+      if (sd && sd.solo) return;
+      t.classList.toggle('on', sel.indexOf(id) >= 0);
+    });
+    var ws = selWords(), n = ws.length;
+    countTo(n);
+    var unit = document.querySelector('.hero .num span');
+    if (unit) unit.textContent = (sel.length === 1 && sel[0] === 'daku') ? '音' : '词';
+    var errs = ws.filter(function (w) { return wrong.indexOf(w.k) >= 0 || dakuWrong.indexOf(w.k) >= 0; }).length;
+    $('meta').textContent = !n ? '点下面的卡片选择范围（可多选）'
+      : sel.length + ' 个范围 · 去重后 ' + n + ' 个' + (errs ? ' · 其中 ' + errs + ' 个在错词本' : ' · 错词本干净');
+
+    var all = SETS.filter(function (s) { return !s.solo; });
+    var seenAll = {}, totalAll = 0, errAll = 0;
+    all.forEach(function (s) {
+      var book = (s.id === 'daku' ? dakuWrong : wrong);
+      s.words.forEach(function (w) {
+        if (seenAll[w.k]) return;
+        seenAll[w.k] = 1; totalAll++;
+        if (book.indexOf(w.k) >= 0) errAll++;
+      });
+    });
+    $('mastery').textContent = '掌握度 ' + Math.round((1 - errAll / (totalAll || 1)) * 100) + '%';
+    $('todayPill').textContent = '📌 今天到期 ' + SCHED.due.length + (SCHED.lateN ? ' · 逾期 ' + SCHED.lateN : '');
+
+    var go = document.querySelector('.go');
+    if (go) go.textContent = n ? '🎧 默写 · ' + n + ' 词' : '🎧 开始默写';
+  }
+
+  /* ---------------- 今天到期 ---------------- */
+  (function initToday() {
+    if (!SCHED.due.length) { $('todayCard').style.display = 'none'; return; }
+    var first = SCHED.due[0];
+    $('todayCard').style.display = 'flex';
+    $('todayName').textContent = first.label + ' · 第' + first.round + '次' + (first.flag ? ' ' + first.flag : '');
+    var extra = SCHED.due.length > 1 ? '（还有 ' + (SCHED.due.length - 1) + ' 项到期）' : '';
+    $('todayMeta').textContent = (first.date || '今天') + ' 到期 ' + extra + (SCHED.lateN ? ' · 另有 ' + SCHED.lateN + ' 项逾期' : '');
+    $('todayGo').onclick = function () {
+      var tid = first.setId, t = setOf(tid);
+      if (!t) return;
+      location.href = TOOL + '?mode=dict&set=' + tid;
+    };
+    if (!sel.length) { SCHED.due.forEach(function (x) { if (x.setId && sel.indexOf(x.setId) < 0) sel.push(x.setId); }); save(); }
+  })();
+
+  function renderDue() {
+    var box = $('dueChips'); box.innerHTML = '';
+    if (!SCHED.due.length && !SCHED.lateN) {
+      box.innerHTML = '<div class="chip" style="pointer-events:none">今天没有到期项 · 自己想练什么就选什么</div>';
+      return;
+    }
+    SCHED.due.forEach(function (x) {
+      var t = setOf(x.setId);
+      var b = document.createElement('button');
+      b.className = 'chip' + (t && !t.solo && sel.indexOf(x.setId) >= 0 ? ' on' : '');
+      b.innerHTML = '<span class="dot"></span>今天到期 · ' + x.label + ' · 第' + x.round + '次';
+      if (t && t.solo) b.onclick = function () { location.href = TOOL + '?mode=' + (t.mode || 'read') + '&set=' + t.id; };
+      else if (t) b.onclick = function () {
+        var i = sel.indexOf(x.setId);
+        if (i >= 0) sel.splice(i, 1); else sel.push(x.setId);
+        save(); renderDue(); paint();
+      };
+      else { b.classList.add('late'); b.style.pointerEvents = 'none'; }
+      box.appendChild(b);
+    });
+    if (SCHED.lateN) {
+      var c = document.createElement('button');
+      c.className = 'chip late';
+      c.textContent = '🕗 还有 ' + SCHED.lateN + ' 项逾期 · 一并练';
+      c.onclick = function () {
+        SCHED.late.forEach(function (x) {
+          var t = setOf(x.setId);
+          if (t && !t.solo && sel.indexOf(x.setId) < 0) sel.push(x.setId);
+        });
+        save(); renderDue(); paint();
+      };
+      box.appendChild(c);
+    }
+  }
+
+  $('allBtn').onclick = function () { sel = SETS.filter(function (s) { return !s.solo; }).map(function (s) { return s.id; }); save(); renderDue(); paint(); };
+  $('clrBtn').onclick = function () { sel = []; save(); renderDue(); paint(); };
+
+  /* ---------------- 🎲 抽一个词 ---------------- */
+  var actx = null, rawCache = {}, bufCache = {};
+  function ac() {
+    try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume(); } catch (e) {}
+    return actx;
+  }
+  function start(buf) {
+    var c = ac(); if (!c || !buf) return;
+    var s = c.createBufferSource(); s.buffer = buf; s.connect(c.destination); s.start(0);
+  }
+  function decodeAndPlay(url, ab) {
+    var c = ac(); if (!c) return;
+    try { c.decodeAudioData(ab.slice(0), function (b) { bufCache[url] = b; start(b); }, function () {}); } catch (e) {}
+  }
+  function play(url) {
+    if (!url) return;
+    if (bufCache[url]) { start(bufCache[url]); return; }
+    if (rawCache[url]) { decodeAndPlay(url, rawCache[url]); return; }
+    fetch(url).then(function (r) { return r.arrayBuffer(); })
+      .then(function (ab) { rawCache[url] = ab; decodeAndPlay(url, ab); }).catch(function () {});
+  }
+  $('rollBtn').onclick = function () {
+    var pool = selWords().length ? selWords() : (typeof WORDS !== 'undefined' ? WORDS : []);
+    if (!pool.length) return;
+    var w = pool[Math.floor(Math.random() * pool.length)];
+    $('rollw').innerHTML = '<b>' + w.k + '</b>' + (w.c ? w.c : '');
+    var e = APP[w.k];
+    if (e) play(e[0] || e[1]);
+    else if (window.speechSynthesis) { try { speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(w.k); u.lang = 'ja-JP'; speechSynthesis.speak(u); } catch (err) {} }
+  };
+
+  /* ---------------- Dock ---------------- */
+  document.querySelectorAll('.dock button').forEach(function (b) {
+    b.onclick = function () {
+      var mode = b.getAttribute('data-mode');
+      if (mode === 'daku') { location.href = TOOL + '?mode=daku'; return; }
+      var ids = sel.slice();
+      if (!ids.length) { $('meta').textContent = '先点上面的卡片选一个范围 ↑'; $('tiles').classList.add('need'); setTimeout(function () { $('tiles').classList.remove('need'); }, 900); return; }
+      save();
+      var NATIVE = ['right', 'left', 'w2', 'all', 'wrong'];
+      (window.PIC_SETS || []).forEach(function (s2) { NATIVE.push(s2.id); });
+      (window.EXTRA_SETS || []).forEach(function (s2) { NATIVE.push(s2.id); });
+      var one = ids.length === 1 && NATIVE.indexOf(ids[0]) >= 0;
+      location.href = TOOL + '?mode=' + mode + (one ? '&set=' + ids[0] : '&set=sel&sets=' + ids.join(','));
+    };
+  });
+
+  renderDue();
+  paint();
+})();
+</script>
+</body>
+</html>

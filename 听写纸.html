@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>日语 听写纸</title>
+<link rel="stylesheet" href="skin.css?v=2">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f4f6;color:#111;font-family:-apple-system,"PingFang SC","Noto Sans JP",sans-serif;padding:16px}
+.sheet{background:#fff;max-width:820px;margin:0 auto 22px;padding:26px 24px;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+h1{font-size:17px;margin:0 0 4px}
+h2{font-size:13px;margin:0 0 14px;font-weight:400;color:#666}
+.hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;border-bottom:1px solid #ddd;padding-bottom:10px}
+.hd .tag{font-size:12px;color:#888}
+.line{display:flex;gap:18px;font-size:12.5px;color:#444;margin-bottom:14px;flex-wrap:wrap}
+.line span{border-bottom:1px solid #bbb;min-width:64px;display:inline-block}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:11.5px;color:#777;font-weight:500;text-align:left;padding:6px 8px;border-bottom:1.5px solid #333}
+td{padding:9px 8px;border-bottom:1px solid #e2e2e2;height:36px;vertical-align:middle}
+td.no{width:30px;color:#aaa;font-size:12px}
+td.zh{width:36%;font-size:14px}
+td.w{width:32%;border-left:1px dotted #cfcfcf}
+td.hz{width:32%;border-left:1px dotted #cfcfcf}
+td.mk{width:40px;text-align:center;color:#bbb}
+td.ph{width:104px;padding:6px 8px}
+td.ph img{width:96px;display:block;border-radius:5px;border:1px solid #ddd}
+.tip{font-size:12px;color:#777;line-height:1.7;margin-top:16px;border-top:1px dashed #ddd;padding-top:12px}
+.tip b{color:#c0392b}
+.ans{font-size:13.5px;line-height:1.9}
+.ans b{color:#c0392b;font-weight:600}
+.warn{background:#fff6f6;border:1px solid #f0c9c9;border-radius:8px;padding:10px 12px;font-size:12.5px;line-height:1.8;color:#8a2b2b;margin-bottom:14px}
+.warn b{color:#c0392b}
+td.why{width:22%;border-left:1px dotted #cfcfcf;color:#bbb;font-size:10.5px;text-align:center}
+td.r{width:19%;border-left:1px dotted #cfcfcf}
+.bar{max-width:820px;margin:0 auto 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.bar button{border:1px solid #d6dbe4;background:#fff;color:#5b6473;border-radius:9px;padding:9px 14px;font-size:13px;font-weight:700;font-family:inherit}
+.bar button.on{background:#16202c;border-color:#16202c;color:#fff}
+.bar span{font-size:11.5px;color:#888}
+.hide{display:none}
+@media print{
+ body{background:#fff;padding:0}
+ .sheet{box-shadow:none;border-radius:0;max-width:100%;padding:12mm 10mm;margin:0;page-break-after:always}
+ .sheet:last-child{page-break-after:auto}
+ .noprint{display:none}
+}
+@media (max-width:520px){td.zh{font-size:13px}td{height:32px;padding:7px 5px}}
+</style>
+</head>
+<body>
+
+<div class="bar noprint">
+  <button data-c="right" class="on">右栏 21 词</button>
+  <button data-c="left">左栏 21 词</button>
+  <button data-c="w3l">📖 第3课·左半边 20 词</button>
+  <button data-c="w3r">📖 第3课·右半边 16 词</button>
+  <button data-c="w2">📚 生词表2 18 词</button>
+  <span>选好再点打印 —— 只打印当前这一栏</span>
+</div>
+<script>
+document.querySelectorAll('.bar button').forEach(function(b){
+  b.onclick=function(){
+    var c=b.getAttribute('data-c');
+    document.querySelectorAll('.bar button').forEach(function(x){x.classList.toggle('on',x===b);});
+    document.querySelectorAll('.col').forEach(function(el){el.classList.toggle('hide', el.id!=='col-'+c);});
+  };
+});
+</script>
+<div class="col" id="col-right">
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>生词表 1 · 右栏 听写纸 <span style="font-size:12px;color:#888">（顺序版）</span></h1>
+      <h2>看中文 → 写假名 + 写汉字</h2>
+    </div>
+    <div class="tag">第 ___ 遍</div>
+  </div>
+  <div class="line">日期<span></span> 用时<span></span> 错<span></span>个</div>
+  <table>
+    <thead><tr><th></th><th>中文（照这个写）</th><th>写假名</th><th>写汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh">姐姐</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">2</td><td class="zh">帽子</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">3</td><td class="zh">冰</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">4</td><td class="zh">裙子</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">5</td><td class="zh">钥匙；锁</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">6</td><td class="zh">苹果</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">7</td><td class="zh">收音机</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">8</td><td class="zh">荞麦（面）</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">9</td><td class="zh">裤子</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">10</td><td class="zh">钟表</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">11</td><td class="zh">汉堡包</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">12</td><td class="zh">排球</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">13</td><td class="zh">（我）弟弟</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">14</td><td class="zh">谁</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">15</td><td class="zh">什么</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">16</td><td class="zh">买（动1他）</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">17</td><td class="zh">（我）姐姐</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">18</td><td class="zh">（我）哥哥</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">19</td><td class="zh">（我）父亲，（我）爸爸</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">20</td><td class="zh">父亲，爸爸</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">21</td><td class="zh">（我）母亲，（我）妈妈</td><td class="w"></td><td class="hz"></td></tr></tbody>
+  </table>
+  <div class="tip"><b>用法</b>：每 7 个一组。先对书出声念 2 遍 → <b>立刻合书</b>，看中文手写假名和汉字 → 写完一列再对答案 → 错的当场重写 3 遍。<br>
+  <b>不许</b>边看课本边抄；<b>不许</b>跳过「写」这一步。</div>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>专项页 · 亲属称谓两套</h1>
+      <h2>左格填「对外人说自己家人」（谦称），右格填「当面叫 / 说别人家人」（敬称）</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文</th><th>谦称（说自己家人）</th><th>敬称（叫 / 说别人家人）</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh">祖父</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">2</td><td class="zh">祖母</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">3</td><td class="zh">父亲</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">4</td><td class="zh">母亲</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">5</td><td class="zh">哥哥</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">6</td><td class="zh">姐姐</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">7</td><td class="zh">弟弟</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">8</td><td class="zh">妹妹</td><td class="w"></td><td class="hz"></td></tr></tbody>
+  </table>
+  <div class="tip">
+    <b>答案</b>：1 そふ / おじいさん｜2 そぼ / おばあさん｜3 ちち / お父さん｜4 はは / お母さん｜5 あに / お兄さん｜6 あね / お姉さん｜7 おとうと / 弟さん｜8 いもうと / 妹さん<br>
+    <b>命令</b>：谈自己家人用谦称，谈别人家人用敬称 —— 说错了在日本人听来是「把自家人抬高了」，很失礼。
+  </div>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>生词表 1 · 右栏 听写纸 <span style="font-size:12px;color:#888">（乱序版）</span></h1>
+      <h2>第二遍必须打乱顺序 —— 不然你记的是「位置」不是「词」</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文（照这个写）</th><th>写假名</th><th>写汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh">汉堡包</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">2</td><td class="zh">帽子</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">3</td><td class="zh">（我）弟弟</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">4</td><td class="zh">钟表</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">5</td><td class="zh">买（动1他）</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">6</td><td class="zh">（我）哥哥</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">7</td><td class="zh">收音机</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">8</td><td class="zh">（我）姐姐</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">9</td><td class="zh">父亲，爸爸</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">10</td><td class="zh">（我）母亲，（我）妈妈</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">11</td><td class="zh">冰</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">12</td><td class="zh">姐姐</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">13</td><td class="zh">苹果</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">14</td><td class="zh">荞麦（面）</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">15</td><td class="zh">裙子</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">16</td><td class="zh">排球</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">17</td><td class="zh">谁</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">18</td><td class="zh">什么</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">19</td><td class="zh">钥匙；锁</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">20</td><td class="zh">裤子</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">21</td><td class="zh">（我）父亲，（我）爸爸</td><td class="w"></td><td class="hz"></td></tr></tbody>
+  </table>
+  <div class="tip"><b>对答案用最后几页</b>。乱序版里错的词 = 今天真正没背进去的词，明天开头先重练它们。</div>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>错词重练页 · 生词表 1 · 右栏</h1>
+      <h2>把乱序版里错的词填进第一列，重写到连续两遍全对为止</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文</th><th>写假名</th><th>写汉字</th><th>错因</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">2</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">3</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">4</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">5</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">6</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">7</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">8</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">9</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">10</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr></tbody>
+  </table>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>答案页 · 生词表 1 · 右栏</h1>
+      <h2>对完答案就合上，别盯着看</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文</th><th>假名 / 声调</th><th>汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="ans" style="width:36%">姐姐</td><td class="ans" style="width:32%"><b>おねえさん</b>②</td><td class="ans"><b>お姉さん</b></td></tr>
+<tr><td class="no">2</td><td class="ans" style="width:36%">帽子</td><td class="ans" style="width:32%"><b>ぼうし</b>⓪</td><td class="ans"><b>帽子</b></td></tr>
+<tr><td class="no">3</td><td class="ans" style="width:36%">冰</td><td class="ans" style="width:32%"><b>こおり</b>⓪</td><td class="ans"><b>氷</b></td></tr>
+<tr><td class="no">4</td><td class="ans" style="width:36%">裙子</td><td class="ans" style="width:32%"><b>スカート</b>②</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">5</td><td class="ans" style="width:36%">钥匙；锁</td><td class="ans" style="width:32%"><b>かぎ</b>②</td><td class="ans"><b>鍵</b></td></tr>
+<tr><td class="no">6</td><td class="ans" style="width:36%">苹果</td><td class="ans" style="width:32%"><b>りんご</b>⓪</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">7</td><td class="ans" style="width:36%">收音机</td><td class="ans" style="width:32%"><b>ラジオ</b>①</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">8</td><td class="ans" style="width:36%">荞麦（面）</td><td class="ans" style="width:32%"><b>そば</b>①</td><td class="ans"><b>蕎麦</b></td></tr>
+<tr><td class="no">9</td><td class="ans" style="width:36%">裤子</td><td class="ans" style="width:32%"><b>ズボン</b>②</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">10</td><td class="ans" style="width:36%">钟表</td><td class="ans" style="width:32%"><b>とけい</b>⓪</td><td class="ans"><b>時計</b></td></tr>
+<tr><td class="no">11</td><td class="ans" style="width:36%">汉堡包</td><td class="ans" style="width:32%"><b>ハンバーガー</b>③</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">12</td><td class="ans" style="width:36%">排球</td><td class="ans" style="width:32%"><b>バレーボール</b>④</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">13</td><td class="ans" style="width:36%">（我）弟弟</td><td class="ans" style="width:32%"><b>おとうと</b>④</td><td class="ans"><b>弟</b></td></tr>
+<tr><td class="no">14</td><td class="ans" style="width:36%">谁</td><td class="ans" style="width:32%"><b>だれ</b>①</td><td class="ans"><b>誰</b></td></tr>
+<tr><td class="no">15</td><td class="ans" style="width:36%">什么</td><td class="ans" style="width:32%"><b>なに</b>①</td><td class="ans"><b>何</b></td></tr>
+<tr><td class="no">16</td><td class="ans" style="width:36%">买（动1他）</td><td class="ans" style="width:32%"><b>かう</b>⓪</td><td class="ans"><b>買う</b></td></tr>
+<tr><td class="no">17</td><td class="ans" style="width:36%">（我）姐姐</td><td class="ans" style="width:32%"><b>あね</b>⓪</td><td class="ans"><b>姉</b></td></tr>
+<tr><td class="no">18</td><td class="ans" style="width:36%">（我）哥哥</td><td class="ans" style="width:32%"><b>あに</b>①</td><td class="ans"><b>兄</b></td></tr>
+<tr><td class="no">19</td><td class="ans" style="width:36%">（我）父亲，（我）爸爸</td><td class="ans" style="width:32%"><b>ちち</b>①</td><td class="ans"><b>父</b></td></tr>
+<tr><td class="no">20</td><td class="ans" style="width:36%">父亲，爸爸</td><td class="ans" style="width:32%"><b>おとうさん</b>②</td><td class="ans"><b>お父さん</b></td></tr>
+<tr><td class="no">21</td><td class="ans" style="width:36%">（我）母亲，（我）妈妈</td><td class="ans" style="width:32%"><b>はは</b>①</td><td class="ans"><b>母</b></td></tr></tbody>
+  </table>
+</div>
+
+</div>
+<div class="col hide" id="col-left">
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>生词表 1 · 左栏 听写纸 <span style="font-size:12px;color:#888">（顺序版）</span></h1>
+      <h2>看中文 → 写假名 + 写汉字</h2>
+    </div>
+    <div class="tag">第 ___ 遍</div>
+  </div>
+  <div class="line">日期<span></span> 用时<span></span> 错<span></span>个</div>
+  <table>
+    <thead><tr><th></th><th>中文（照这个写）</th><th>写假名</th><th>写汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh">城镇；街道</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">2</td><td class="zh">道路</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">3</td><td class="zh">雨</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">4</td><td class="zh">云</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">5</td><td class="zh">蔬菜店</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">6</td><td class="zh">雪</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">7</td><td class="zh">夜晚</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">8</td><td class="zh">村庄</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">9</td><td class="zh">药</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">10</td><td class="zh">袋子</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">11</td><td class="zh">河流</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">12</td><td class="zh">餐馆</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">13</td><td class="zh">现在</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">14</td><td class="zh">哪里</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">15</td><td class="zh">书</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">16</td><td class="zh">去（动1自）</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">17</td><td class="zh">车站</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">18</td><td class="zh">妈妈</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">19</td><td class="zh">哥哥</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">20</td><td class="zh">空气</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">21</td><td class="zh">老师</td><td class="w"></td><td class="hz"></td></tr></tbody>
+  </table>
+  <div class="tip"><b>用法</b>：每 7 个一组。先对书出声念 2 遍 → <b>立刻合书</b>，看中文手写假名和汉字 → 写完一列再对答案 → 错的当场重写 3 遍。<br>
+  <b>不许</b>边看课本边抄；<b>不许</b>跳过「写」这一步。</div>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>生词表 1 · 左栏 听写纸 <span style="font-size:12px;color:#888">（乱序版）</span></h1>
+      <h2>第二遍必须打乱顺序 —— 不然你记的是「位置」不是「词」</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文（照这个写）</th><th>写假名</th><th>写汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh">去（动1自）</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">2</td><td class="zh">村庄</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">3</td><td class="zh">哪里</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">4</td><td class="zh">雪</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">5</td><td class="zh">空气</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">6</td><td class="zh">妈妈</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">7</td><td class="zh">蔬菜店</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">8</td><td class="zh">餐馆</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">9</td><td class="zh">云</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">10</td><td class="zh">车站</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">11</td><td class="zh">道路</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">12</td><td class="zh">河流</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">13</td><td class="zh">老师</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">14</td><td class="zh">夜晚</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">15</td><td class="zh">书</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">16</td><td class="zh">哥哥</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">17</td><td class="zh">城镇；街道</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">18</td><td class="zh">药</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">19</td><td class="zh">现在</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">20</td><td class="zh">雨</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">21</td><td class="zh">袋子</td><td class="w"></td><td class="hz"></td></tr></tbody>
+  </table>
+  <div class="tip"><b>对答案用最后几页</b>。乱序版里错的词 = 今天真正没背进去的词，明天开头先重练它们。</div>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>错词重练页 · 生词表 1 · 左栏</h1>
+      <h2>把乱序版里错的词填进第一列，重写到连续两遍全对为止</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文</th><th>写假名</th><th>写汉字</th><th>错因</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">2</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">3</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">4</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">5</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">6</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">7</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">8</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">9</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">10</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr></tbody>
+  </table>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>答案页 · 生词表 1 · 左栏</h1>
+      <h2>对完答案就合上，别盯着看</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文</th><th>假名 / 声调</th><th>汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="ans" style="width:36%">城镇；街道</td><td class="ans" style="width:32%"><b>まち</b>②</td><td class="ans"><b>町</b></td></tr>
+<tr><td class="no">2</td><td class="ans" style="width:36%">道路</td><td class="ans" style="width:32%"><b>みち</b>①</td><td class="ans"><b>道</b></td></tr>
+<tr><td class="no">3</td><td class="ans" style="width:36%">雨</td><td class="ans" style="width:32%"><b>あめ</b>①</td><td class="ans"><b>雨</b></td></tr>
+<tr><td class="no">4</td><td class="ans" style="width:36%">云</td><td class="ans" style="width:32%"><b>くも</b>①</td><td class="ans"><b>雲</b></td></tr>
+<tr><td class="no">5</td><td class="ans" style="width:36%">蔬菜店</td><td class="ans" style="width:32%"><b>やおや</b>⓪</td><td class="ans"><b>八百屋</b></td></tr>
+<tr><td class="no">6</td><td class="ans" style="width:36%">雪</td><td class="ans" style="width:32%"><b>ゆき</b>②</td><td class="ans"><b>雪</b></td></tr>
+<tr><td class="no">7</td><td class="ans" style="width:36%">夜晚</td><td class="ans" style="width:32%"><b>よる</b>①</td><td class="ans"><b>夜</b></td></tr>
+<tr><td class="no">8</td><td class="ans" style="width:36%">村庄</td><td class="ans" style="width:32%"><b>むら</b>②</td><td class="ans"><b>村</b></td></tr>
+<tr><td class="no">9</td><td class="ans" style="width:36%">药</td><td class="ans" style="width:32%"><b>くすり</b>⓪</td><td class="ans"><b>薬</b></td></tr>
+<tr><td class="no">10</td><td class="ans" style="width:36%">袋子</td><td class="ans" style="width:32%"><b>ふくろ</b>③</td><td class="ans"><b>袋</b></td></tr>
+<tr><td class="no">11</td><td class="ans" style="width:36%">河流</td><td class="ans" style="width:32%"><b>かわ</b>②</td><td class="ans"><b>川</b></td></tr>
+<tr><td class="no">12</td><td class="ans" style="width:36%">餐馆</td><td class="ans" style="width:32%"><b>レストラン</b>①</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">13</td><td class="ans" style="width:36%">现在</td><td class="ans" style="width:32%"><b>いま</b>①</td><td class="ans"><b>今</b></td></tr>
+<tr><td class="no">14</td><td class="ans" style="width:36%">哪里</td><td class="ans" style="width:32%"><b>どこ</b>①</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">15</td><td class="ans" style="width:36%">书</td><td class="ans" style="width:32%"><b>ほん</b>①</td><td class="ans"><b>本</b></td></tr>
+<tr><td class="no">16</td><td class="ans" style="width:36%">去（动1自）</td><td class="ans" style="width:32%"><b>いく</b>⓪</td><td class="ans"><b>行く</b></td></tr>
+<tr><td class="no">17</td><td class="ans" style="width:36%">车站</td><td class="ans" style="width:32%"><b>えき</b>①</td><td class="ans"><b>駅</b></td></tr>
+<tr><td class="no">18</td><td class="ans" style="width:36%">妈妈</td><td class="ans" style="width:32%"><b>おかあさん</b>②</td><td class="ans"><b>お母さん</b></td></tr>
+<tr><td class="no">19</td><td class="ans" style="width:36%">哥哥</td><td class="ans" style="width:32%"><b>おにいさん</b>②</td><td class="ans"><b>お兄さん</b></td></tr>
+<tr><td class="no">20</td><td class="ans" style="width:36%">空气</td><td class="ans" style="width:32%"><b>くうき</b>①</td><td class="ans"><b>空気</b></td></tr>
+<tr><td class="no">21</td><td class="ans" style="width:36%">老师</td><td class="ans" style="width:32%"><b>せんせい</b>③</td><td class="ans"><b>先生</b></td></tr></tbody>
+  </table>
+</div>
+
+</div>
+<div class="col hide" id="col-w2">
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>生词表 2 听写纸 <span style="font-size:12px;color:#888">（顺序版）</span></h1>
+      <h2>看中文 → 写假名 + 写汉字</h2>
+    </div>
+    <div class="tag">第 ___ 遍</div>
+  </div>
+  <div class="line">日期<span></span> 用时<span></span> 错<span></span>个</div>
+  <table>
+    <thead><tr><th></th><th>中文（照这个写）</th><th>写假名</th><th>写汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh">（初高中）学生</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">2</td><td class="zh">女儿</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">3</td><td class="zh">西式蛋糕</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">4</td><td class="zh">眼镜</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">5</td><td class="zh">公园</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">6</td><td class="zh">店铺，商店</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">7</td><td class="zh">天津</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">8</td><td class="zh">手提包，书包</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">9</td><td class="zh">他</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">10</td><td class="zh">毛巾</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">11</td><td class="zh">日语，日文</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">12</td><td class="zh">地图</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">13</td><td class="zh">祖父，外祖父（敬称）</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">14</td><td class="zh">（我）祖父，（我）外祖父</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">15</td><td class="zh">祖母，外祖母（敬称）</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">16</td><td class="zh">（我）祖母，（我）外祖母</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">17</td><td class="zh">我</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">18</td><td class="zh">（我）妹妹</td><td class="w"></td><td class="hz"></td></tr></tbody>
+  </table>
+  <div class="tip"><b>用法</b>：每 7 个一组。先对书出声念 2 遍 → <b>立刻合书</b>，看中文手写假名和汉字 → 写完一列再对答案 → 错的当场重写 3 遍。<br>
+  <b>不许</b>边看课本边抄；<b>不许</b>跳过「写」这一步。</div>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>生词表 2 听写纸 <span style="font-size:12px;color:#888">（乱序版）</span></h1>
+      <h2>第二遍必须打乱顺序 —— 不然你记的是「位置」不是「词」</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文（照这个写）</th><th>写假名</th><th>写汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh">公园</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">2</td><td class="zh">西式蛋糕</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">3</td><td class="zh">眼镜</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">4</td><td class="zh">我</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">5</td><td class="zh">（我）妹妹</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">6</td><td class="zh">日语，日文</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">7</td><td class="zh">祖母，外祖母（敬称）</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">8</td><td class="zh">（我）祖母，（我）外祖母</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">9</td><td class="zh">毛巾</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">10</td><td class="zh">女儿</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">11</td><td class="zh">他</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">12</td><td class="zh">祖父，外祖父（敬称）</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">13</td><td class="zh">（我）祖父，（我）外祖父</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">14</td><td class="zh">地图</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">15</td><td class="zh">天津</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">16</td><td class="zh">手提包，书包</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">17</td><td class="zh">（初高中）学生</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">18</td><td class="zh">店铺，商店</td><td class="w"></td><td class="hz"></td></tr></tbody>
+  </table>
+  <div class="tip"><b>对答案用最后几页</b>。乱序版里错的词 = 今天真正没背进去的词，明天开头先重练它们。</div>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>错词重练页 · 生词表 2</h1>
+      <h2>把乱序版里错的词填进第一列，重写到连续两遍全对为止</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文</th><th>写假名</th><th>写汉字</th><th>错因</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">2</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">3</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">4</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">5</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">6</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">7</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">8</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">9</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">10</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr></tbody>
+  </table>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>答案页 · 生词表 2</h1>
+      <h2>对完答案就合上，别盯着看</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文</th><th>假名 / 声调</th><th>汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="ans" style="width:36%">（初高中）学生</td><td class="ans" style="width:32%"><b>せいと</b>①</td><td class="ans"><b>生徒</b></td></tr>
+<tr><td class="no">2</td><td class="ans" style="width:36%">女儿</td><td class="ans" style="width:32%"><b>むすめ</b>③</td><td class="ans"><b>娘</b></td></tr>
+<tr><td class="no">3</td><td class="ans" style="width:36%">西式蛋糕</td><td class="ans" style="width:32%"><b>ケーキ</b>①</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">4</td><td class="ans" style="width:36%">眼镜</td><td class="ans" style="width:32%"><b>めがね</b>①</td><td class="ans"><b>眼鏡</b></td></tr>
+<tr><td class="no">5</td><td class="ans" style="width:36%">公园</td><td class="ans" style="width:32%"><b>こうえん</b>⓪</td><td class="ans"><b>公園</b></td></tr>
+<tr><td class="no">6</td><td class="ans" style="width:36%">店铺，商店</td><td class="ans" style="width:32%"><b>みせ</b>②</td><td class="ans"><b>店</b></td></tr>
+<tr><td class="no">7</td><td class="ans" style="width:36%">天津</td><td class="ans" style="width:32%"><b>てんしん</b>①</td><td class="ans"><b>天津</b></td></tr>
+<tr><td class="no">8</td><td class="ans" style="width:36%">手提包，书包</td><td class="ans" style="width:32%"><b>かばん</b>⓪</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">9</td><td class="ans" style="width:36%">他</td><td class="ans" style="width:32%"><b>かれ</b>①</td><td class="ans"><b>彼</b></td></tr>
+<tr><td class="no">10</td><td class="ans" style="width:36%">毛巾</td><td class="ans" style="width:32%"><b>タオル</b>①</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">11</td><td class="ans" style="width:36%">日语，日文</td><td class="ans" style="width:32%"><b>にほんご</b>⓪</td><td class="ans"><b>日本語</b></td></tr>
+<tr><td class="no">12</td><td class="ans" style="width:36%">地图</td><td class="ans" style="width:32%"><b>ちず</b>①</td><td class="ans"><b>地図</b></td></tr>
+<tr><td class="no">13</td><td class="ans" style="width:36%">祖父，外祖父（敬称）</td><td class="ans" style="width:32%"><b>おじいさん</b>②</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">14</td><td class="ans" style="width:36%">（我）祖父，（我）外祖父</td><td class="ans" style="width:32%"><b>そふ</b>①</td><td class="ans"><b>祖父</b></td></tr>
+<tr><td class="no">15</td><td class="ans" style="width:36%">祖母，外祖母（敬称）</td><td class="ans" style="width:32%"><b>おばあさん</b>②</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">16</td><td class="ans" style="width:36%">（我）祖母，（我）外祖母</td><td class="ans" style="width:32%"><b>そぼ</b>①</td><td class="ans"><b>祖母</b></td></tr>
+<tr><td class="no">17</td><td class="ans" style="width:36%">我</td><td class="ans" style="width:32%"><b>わたし</b>⓪</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">18</td><td class="ans" style="width:36%">（我）妹妹</td><td class="ans" style="width:32%"><b>いもうと</b>④</td><td class="ans"><b>妹</b></td></tr></tbody>
+  </table>
+</div>
+
+</div>
+<div class="col hide" id="col-w3l">
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>📖 第3课·左半边 20 词 听写纸 <span style="font-size:12px;color:#888">（顺序版）</span></h1>
+      <h2>看中文 → 写假名 + 写汉字</h2>
+    </div>
+    <div class="tag">第 ___ 遍</div>
+  </div>
+  <div class="line">日期<span></span> 用时<span></span> 错<span></span>个</div>
+  <table>
+    <thead><tr><th></th><th>中文（照这个写）</th><th>写假名</th><th>写汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh">熊猫</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">2</td><td class="zh">铅笔</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">3</td><td class="zh">杯子</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">4</td><td class="zh">机器人</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">5</td><td class="zh">日记</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">6</td><td class="zh">杂志</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">7</td><td class="zh">邮票</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">8</td><td class="zh">三明治</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">9</td><td class="zh">床</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">10</td><td class="zh">面包</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">11</td><td class="zh">喜欢，爱好</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">12</td><td class="zh">我（男子自称）</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">13</td><td class="zh">篮球</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">14</td><td class="zh">吉他</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">15</td><td class="zh">小提琴</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">16</td><td class="zh">橙子</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">17</td><td class="zh">教室；兴趣班</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">18</td><td class="zh">学习；用功</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">19</td><td class="zh">课，上课</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">20</td><td class="zh">图书馆</td><td class="w"></td><td class="hz"></td></tr></tbody>
+  </table>
+  <div class="tip"><b>用法</b>：每 7 个一组。先对书出声念 2 遍 → <b>立刻合书</b>，看中文手写假名和汉字 → 写完一列再对答案 → 错的当场重写 3 遍。<br>
+  <b>不许</b>边看课本边抄；<b>不许</b>跳过「写」这一步。</div>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>📖 第3课·左半边 20 词 听写纸 <span style="font-size:12px;color:#888">（乱序版）</span></h1>
+      <h2>第二遍必须打乱顺序 —— 不然你记的是「位置」不是「词」</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文（照这个写）</th><th>写假名</th><th>写汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh">铅笔</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">2</td><td class="zh">三明治</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">3</td><td class="zh">日记</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">4</td><td class="zh">床</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">5</td><td class="zh">教室；兴趣班</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">6</td><td class="zh">课，上课</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">7</td><td class="zh">吉他</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">8</td><td class="zh">小提琴</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">9</td><td class="zh">熊猫</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">10</td><td class="zh">机器人</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">11</td><td class="zh">我（男子自称）</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">12</td><td class="zh">学习；用功</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">13</td><td class="zh">图书馆</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">14</td><td class="zh">篮球</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">15</td><td class="zh">杯子</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">16</td><td class="zh">喜欢，爱好</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">17</td><td class="zh">面包</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">18</td><td class="zh">杂志</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">19</td><td class="zh">邮票</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">20</td><td class="zh">橙子</td><td class="w"></td><td class="hz"></td></tr></tbody>
+  </table>
+  <div class="tip"><b>对答案用最后几页</b>。乱序版里错的词 = 今天真正没背进去的词，明天开头先重练它们。</div>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>错词重练页 · 📖 第3课·左半边 20 词</h1>
+      <h2>把乱序版里错的词填进第一列，重写到连续两遍全对为止</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文</th><th>写假名</th><th>写汉字</th><th>错因</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">2</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">3</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">4</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">5</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">6</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">7</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">8</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">9</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">10</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr></tbody>
+  </table>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>答案页 · 📖 第3课·左半边 20 词</h1>
+      <h2>对完答案就合上，别盯着看</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文</th><th>假名 / 声调</th><th>汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="ans" style="width:36%">熊猫</td><td class="ans" style="width:32%"><b>パンダ</b>①</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">2</td><td class="ans" style="width:36%">铅笔</td><td class="ans" style="width:32%"><b>えんぴつ</b>⓪</td><td class="ans"><b>鉛筆</b></td></tr>
+<tr><td class="no">3</td><td class="ans" style="width:36%">杯子</td><td class="ans" style="width:32%"><b>コップ</b>⓪</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">4</td><td class="ans" style="width:36%">机器人</td><td class="ans" style="width:32%"><b>ロボット</b>①</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">5</td><td class="ans" style="width:36%">日记</td><td class="ans" style="width:32%"><b>にっき</b>⓪</td><td class="ans"><b>日記</b></td></tr>
+<tr><td class="no">6</td><td class="ans" style="width:36%">杂志</td><td class="ans" style="width:32%"><b>ざっし</b>⓪</td><td class="ans"><b>雑誌</b></td></tr>
+<tr><td class="no">7</td><td class="ans" style="width:36%">邮票</td><td class="ans" style="width:32%"><b>きって</b>⓪</td><td class="ans"><b>切手</b></td></tr>
+<tr><td class="no">8</td><td class="ans" style="width:36%">三明治</td><td class="ans" style="width:32%"><b>サンドイッチ</b>④</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">9</td><td class="ans" style="width:36%">床</td><td class="ans" style="width:32%"><b>ベッド</b>①</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">10</td><td class="ans" style="width:36%">面包</td><td class="ans" style="width:32%"><b>パン</b>①</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">11</td><td class="ans" style="width:36%">喜欢，爱好</td><td class="ans" style="width:32%"><b>すき</b>②</td><td class="ans"><b>好き</b></td></tr>
+<tr><td class="no">12</td><td class="ans" style="width:36%">我（男子自称）</td><td class="ans" style="width:32%"><b>ぼく</b>①</td><td class="ans"><b>僕</b></td></tr>
+<tr><td class="no">13</td><td class="ans" style="width:36%">篮球</td><td class="ans" style="width:32%"><b>バスケットボール</b>⑥</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">14</td><td class="ans" style="width:36%">吉他</td><td class="ans" style="width:32%"><b>ギター</b>①</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">15</td><td class="ans" style="width:36%">小提琴</td><td class="ans" style="width:32%"><b>バイオリン</b>⓪</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">16</td><td class="ans" style="width:36%">橙子</td><td class="ans" style="width:32%"><b>オレンジ</b>②</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">17</td><td class="ans" style="width:36%">教室；兴趣班</td><td class="ans" style="width:32%"><b>きょうしつ</b>⓪</td><td class="ans"><b>教室</b></td></tr>
+<tr><td class="no">18</td><td class="ans" style="width:36%">学习；用功</td><td class="ans" style="width:32%"><b>べんきょう</b>⓪</td><td class="ans"><b>勉強</b></td></tr>
+<tr><td class="no">19</td><td class="ans" style="width:36%">课，上课</td><td class="ans" style="width:32%"><b>じゅぎょう</b>①</td><td class="ans"><b>授業</b></td></tr>
+<tr><td class="no">20</td><td class="ans" style="width:36%">图书馆</td><td class="ans" style="width:32%"><b>としょかん</b>②</td><td class="ans"><b>図書館</b></td></tr></tbody>
+  </table>
+</div>
+
+</div>
+<div class="col hide" id="col-w3r">
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>📖 第3课·右半边 16 词 听写纸 <span style="font-size:12px;color:#888">（顺序版）</span></h1>
+      <h2>看中文 → 写假名 + 写汉字</h2>
+    </div>
+    <div class="tag">第 ___ 遍</div>
+  </div>
+  <div class="line">日期<span></span> 用时<span></span> 错<span></span>个</div>
+  <table>
+    <thead><tr><th></th><th>中文（照这个写）</th><th>写假名</th><th>写汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh">练习</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">2</td><td class="zh">武术</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">3</td><td class="zh">医生</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">4</td><td class="zh">医院</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">5</td><td class="zh">中国菜</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">6</td><td class="zh">中文，汉语</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">7</td><td class="zh">体育馆</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">8</td><td class="zh">准备</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">9</td><td class="zh">房间</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">10</td><td class="zh">棒球</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">11</td><td class="zh">运动场，操场</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">12</td><td class="zh">周末</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">13</td><td class="zh">做</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">14</td><td class="zh">初级中学，初中</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">15</td><td class="zh">相同</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">16</td><td class="zh">班</td><td class="w"></td><td class="hz"></td></tr></tbody>
+  </table>
+  <div class="tip"><b>用法</b>：每 7 个一组。先对书出声念 2 遍 → <b>立刻合书</b>，看中文手写假名和汉字 → 写完一列再对答案 → 错的当场重写 3 遍。<br>
+  <b>不许</b>边看课本边抄；<b>不许</b>跳过「写」这一步。</div>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>📖 第3课·右半边 16 词 听写纸 <span style="font-size:12px;color:#888">（乱序版）</span></h1>
+      <h2>第二遍必须打乱顺序 —— 不然你记的是「位置」不是「词」</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文（照这个写）</th><th>写假名</th><th>写汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh">中文，汉语</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">2</td><td class="zh">运动场，操场</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">3</td><td class="zh">房间</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">4</td><td class="zh">做</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">5</td><td class="zh">初级中学，初中</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">6</td><td class="zh">练习</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">7</td><td class="zh">中国菜</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">8</td><td class="zh">棒球</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">9</td><td class="zh">周末</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">10</td><td class="zh">班</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">11</td><td class="zh">武术</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">12</td><td class="zh">准备</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">13</td><td class="zh">医生</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">14</td><td class="zh">相同</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">15</td><td class="zh">医院</td><td class="w"></td><td class="hz"></td></tr>
+<tr><td class="no">16</td><td class="zh">体育馆</td><td class="w"></td><td class="hz"></td></tr></tbody>
+  </table>
+  <div class="tip"><b>对答案用最后几页</b>。乱序版里错的词 = 今天真正没背进去的词，明天开头先重练它们。</div>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>错词重练页 · 📖 第3课·右半边 16 词</h1>
+      <h2>把乱序版里错的词填进第一列，重写到连续两遍全对为止</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文</th><th>写假名</th><th>写汉字</th><th>错因</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">2</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">3</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">4</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">5</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">6</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">7</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">8</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">9</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr>
+<tr><td class="no">10</td><td class="zh"></td><td class="w"></td><td class="hz"></td><td class="why">□音 □形 □义</td></tr></tbody>
+  </table>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div>
+      <h1>答案页 · 📖 第3课·右半边 16 词</h1>
+      <h2>对完答案就合上，别盯着看</h2>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th>中文</th><th>假名 / 声调</th><th>汉字</th></tr></thead>
+    <tbody><tr><td class="no">1</td><td class="ans" style="width:36%">练习</td><td class="ans" style="width:32%"><b>れんしゅう</b>⓪</td><td class="ans"><b>練習</b></td></tr>
+<tr><td class="no">2</td><td class="ans" style="width:36%">武术</td><td class="ans" style="width:32%"><b>ぶじゅつ</b>①</td><td class="ans"><b>武術</b></td></tr>
+<tr><td class="no">3</td><td class="ans" style="width:36%">医生</td><td class="ans" style="width:32%"><b>いしゃ</b>⓪</td><td class="ans"><b>医者</b></td></tr>
+<tr><td class="no">4</td><td class="ans" style="width:36%">医院</td><td class="ans" style="width:32%"><b>びょういん</b>⓪</td><td class="ans"><b>病院</b></td></tr>
+<tr><td class="no">5</td><td class="ans" style="width:36%">中国菜</td><td class="ans" style="width:32%"><b>ちゅうかりょうり</b>④</td><td class="ans"><b>中華料理</b></td></tr>
+<tr><td class="no">6</td><td class="ans" style="width:36%">中文，汉语</td><td class="ans" style="width:32%"><b>ちゅうごくご</b>⓪</td><td class="ans"><b>中国語</b></td></tr>
+<tr><td class="no">7</td><td class="ans" style="width:36%">体育馆</td><td class="ans" style="width:32%"><b>たいいくかん</b>④</td><td class="ans"><b>体育館</b></td></tr>
+<tr><td class="no">8</td><td class="ans" style="width:36%">准备</td><td class="ans" style="width:32%"><b>じゅんび</b>①</td><td class="ans"><b>準備</b></td></tr>
+<tr><td class="no">9</td><td class="ans" style="width:36%">房间</td><td class="ans" style="width:32%"><b>へや</b>②</td><td class="ans"><b>部屋</b></td></tr>
+<tr><td class="no">10</td><td class="ans" style="width:36%">棒球</td><td class="ans" style="width:32%"><b>やきゅう</b>⓪</td><td class="ans"><b>野球</b></td></tr>
+<tr><td class="no">11</td><td class="ans" style="width:36%">运动场，操场</td><td class="ans" style="width:32%"><b>うんどうじょう</b>⓪</td><td class="ans"><b>運動場</b></td></tr>
+<tr><td class="no">12</td><td class="ans" style="width:36%">周末</td><td class="ans" style="width:32%"><b>しゅうまつ</b>⓪</td><td class="ans"><b>週末</b></td></tr>
+<tr><td class="no">13</td><td class="ans" style="width:36%">做</td><td class="ans" style="width:32%"><b>する</b>⓪</td><td class="ans"><b>（无汉字）</b></td></tr>
+<tr><td class="no">14</td><td class="ans" style="width:36%">初级中学，初中</td><td class="ans" style="width:32%"><b>ちゅうがっこう</b>③</td><td class="ans"><b>中学校</b></td></tr>
+<tr><td class="no">15</td><td class="ans" style="width:36%">相同</td><td class="ans" style="width:32%"><b>おなじ</b>⓪</td><td class="ans"><b>同じ</b></td></tr>
+<tr><td class="no">16</td><td class="ans" style="width:36%">班</td><td class="ans" style="width:32%"><b>クラス</b>①</td><td class="ans"><b>（无汉字）</b></td></tr></tbody>
+  </table>
+</div>
+
+</div>
+</body>
+</html>

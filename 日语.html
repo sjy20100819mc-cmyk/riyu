@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>日语学习台 · 点读 + 听读默写 + 自测卡 + 浊音</title>
+<style>
+/* ============ 液态玻璃 · 简洁版 ============ */
+:root{
+  --ink:#0b1220; --ink2:#5d6675; --ink3:#8b94a3;
+  --blue:#0a84ff; --blue2:#4aa3ff;
+  --green:#0f9f5a; --red:#e5484d;
+  --hair:rgba(11,18,32,.08);
+  --glass:linear-gradient(165deg,rgba(255,255,255,.78),rgba(255,255,255,.58));
+  --shadow:0 1px 1px rgba(255,255,255,.85) inset,0 10px 26px rgba(16,26,44,.09),0 1px 3px rgba(16,26,44,.06);
+  --r:22px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;padding:0 14px 56px;
+  font:16px/1.45 -apple-system,"SF Pro Text","PingFang SC",system-ui,sans-serif;
+  color:var(--ink);background:transparent;
+  -webkit-font-smoothing:antialiased;
+}
+/* 背景：纯渐变柔光（不用 blur 滤镜，性能稳） */
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;
+  background:
+    radial-gradient(58% 42% at 8% 2%, rgba(150,196,255,.75) 0%, rgba(150,196,255,0) 62%),
+    radial-gradient(52% 40% at 96% 6%, rgba(255,190,225,.7) 0%, rgba(255,190,225,0) 62%),
+    radial-gradient(60% 44% at 4% 96%, rgba(165,240,215,.62) 0%, rgba(165,240,215,0) 64%),
+    radial-gradient(52% 40% at 98% 92%, rgba(200,192,255,.6) 0%, rgba(200,192,255,0) 62%),
+    linear-gradient(180deg,#fbfcfe,#eef2f8 55%,#e8edf5)}
+.bg i{display:none}
+
+/* 玻璃基类 */
+.top,.card,.flash,.link{
+  background:var(--glass);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(255,255,255,.72);
+  box-shadow:var(--shadow);
+}
+/* 小元素不用毛玻璃（性能）：只做半透明+高光边 */
+.wc,.chip,.sent,.pair .side,.warn,.ans,.nowpill{
+  background:linear-gradient(165deg,rgba(255,255,255,.66),rgba(255,255,255,.5));
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 1px 1px rgba(255,255,255,.8) inset,0 6px 16px rgba(16,26,44,.07);
+}
+
+/* ============ 顶栏 ============ */
+.top{position:sticky;top:0;z-index:30;margin:0 -14px 14px;padding:14px 14px 12px;
+  border-radius:0 0 26px 26px;border-top:0}
+.top h1{font-size:16px;font-weight:680;letter-spacing:.2px;margin:0}
+.top .sub{font-size:11.5px;color:var(--ink3);margin-top:3px;letter-spacing:.2px}
+.tabs{display:flex;gap:3px;margin-top:12px;padding:3px;border-radius:15px;
+  background:rgba(118,130,152,.13);border:1px solid rgba(255,255,255,.5)}
+.tabs button{flex:1;border:0;border-radius:12px;padding:8px 2px;font:600 12.5px/1 inherit;
+  color:var(--ink2);background:transparent;font-family:inherit;white-space:nowrap;
+  transition:transform .22s cubic-bezier(.32,.72,0,1),color .2s}
+.tabs button.on{background:linear-gradient(180deg,#fff,#f4f7fc);color:var(--ink);
+  box-shadow:0 1px 1px rgba(255,255,255,.9) inset,0 3px 10px rgba(16,26,44,.13),0 1px 2px rgba(16,26,44,.08)}
+.tabs button:active{transform:scale(.96)}
+
+/* ============ 范围胶囊（横向滚动） ============ */
+.chips{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.ch{flex:0 0 auto;border-radius:999px;padding:8px 14px;font:600 12.5px/1 inherit;color:var(--ink2);
+  border:1px solid rgba(255,255,255,.72);background:linear-gradient(165deg,rgba(255,255,255,.78),rgba(255,255,255,.56));
+  box-shadow:0 1px 1px rgba(255,255,255,.8) inset,0 4px 12px rgba(16,26,44,.07);
+  transition:transform .2s cubic-bezier(.32,.72,0,1),background .2s,color .2s}
+.ch.on{background:linear-gradient(180deg,#2b3a4f,#16202c);color:#fff;border-color:transparent;
+  box-shadow:0 6px 16px rgba(16,26,44,.28)}
+.ch:active{transform:scale(.95)}
+
+/* ============ 开关 ============ */
+.toggles{display:flex;gap:7px;flex-wrap:wrap;margin:2px 0 10px}
+.tg{border-radius:11px;padding:7px 11px;font:600 12px/1 inherit;color:var(--ink2);
+  border:1px solid rgba(255,255,255,.7);
+  background:linear-gradient(165deg,rgba(255,255,255,.68),rgba(255,255,255,.5));
+  box-shadow:0 1px 1px rgba(255,255,255,.75) inset,0 3px 10px rgba(16,26,44,.06);
+  transition:transform .2s cubic-bezier(.32,.72,0,1),background .2s,color .2s}
+.tg.on{background:linear-gradient(180deg,rgba(10,132,255,.16),rgba(10,132,255,.1));
+  color:#0a63c8;border-color:rgba(10,132,255,.28)}
+.tg.engbtn.on{background:linear-gradient(180deg,rgba(15,159,90,.16),rgba(15,159,90,.1));
+  color:#0b7a46;border-color:rgba(15,159,90,.3)}
+.tg:active{transform:scale(.95)}
+
+/* ============ 卡片 ============ */
+.card{border-radius:var(--r);padding:14px;margin-bottom:12px;border-top-color:rgba(255,255,255,.95)}
+.sec{font-size:11.5px;font-weight:700;color:var(--ink3);letter-spacing:.4px;margin:14px 2px 8px}
+.sec:first-child{margin-top:2px}
+
+/* ============ 词卡 ============ */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.wc{border-radius:18px;padding:12px 10px;text-align:center;border:1px solid rgba(255,255,255,.7);
+  background:linear-gradient(175deg,rgba(255,255,255,.86),rgba(255,255,255,.6) 60%,rgba(244,248,255,.62));
+  transition:transform .2s cubic-bezier(.32,.72,0,1),box-shadow .2s,border-color .2s}
+.wc:active{transform:scale(.96)}
+.wc.speaking{border-color:rgba(10,132,255,.55);animation:pulse 1.15s ease-out infinite}
+.wc .k{font-size:25px;font-weight:680;letter-spacing:.4px;line-height:1.2;word-break:break-all}
+.wc .j{font-size:12.5px;color:var(--ink2);margin-top:3px}
+.wc .c{font-size:12px;color:var(--red);font-weight:600;margin-top:2px}
+.wc .tip{display:none;font-size:11px;color:var(--ink3);margin-top:7px;line-height:1.5;text-align:left}
+.wc.open .tip{display:block}
+.wc .ph{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:13px;margin:0 0 9px;background:rgba(120,130,150,.12)}
+.picg{grid-template-columns:1fr;gap:11px}
+body.nocn .wc .c{visibility:hidden}
+body.nokanji .wc .j{visibility:hidden}
+body.nokana .wc .k{visibility:hidden}
+body.notip .wc .tip{display:none}
+
+/* 例句 / ～屋 / 称谓 */
+.sent{border-radius:18px;padding:13px;margin-bottom:9px;border:1px solid rgba(255,255,255,.7);
+  transition:transform .2s cubic-bezier(.32,.72,0,1),border-color .2s}
+.sent:active{transform:scale(.985)}
+.sent.speaking{border-color:rgba(10,132,255,.55)}
+.sent .g{font-size:10.5px;color:var(--blue);font-weight:700;margin-bottom:5px;letter-spacing:.3px}
+.sent .ja{font-size:17.5px;font-weight:650;line-height:1.6}
+.sent .ja em{font-style:normal;color:#d93a3f;background:rgba(217,58,63,.1);border-radius:6px;padding:0 3px}
+.sent .zh{font-size:12px;color:var(--ink3);margin-top:6px}
+.chip{border-radius:14px;padding:10px 12px;text-align:center;border:1px solid rgba(255,255,255,.7);
+  transition:transform .2s cubic-bezier(.32,.72,0,1),border-color .2s}
+.chip:active{transform:scale(.96)}
+.chip.speaking{border-color:rgba(10,132,255,.55);animation:pulse 1.15s ease-out infinite}
+.chip .k{font-size:18px;font-weight:680}
+.chip .j{font-size:11px;color:var(--ink2)}
+.chip .c{font-size:11px;color:var(--red);font-weight:600}
+.pair{display:flex;gap:9px;margin-bottom:9px}
+.pair .side{flex:1;border-radius:16px;padding:11px;text-align:center;border:1px solid rgba(255,255,255,.7);
+  transition:transform .2s cubic-bezier(.32,.72,0,1),border-color .2s}
+.pair .side:active{transform:scale(.96)}
+.pair .side.speaking{border-color:rgba(10,132,255,.55)}
+.pair .side .k{font-size:20px;font-weight:680}
+.pair .side .lb{font-size:10px;color:var(--ink3)}
+.pair .side.kei .lb{color:#0a63c8}
+.pair .side.ken .lb{color:var(--green)}
+.pair .mid{width:46px;display:flex;align-items:center;justify-content:center;font-size:10px;line-height:1.25;color:var(--red);font-weight:700;text-align:center}
+
+/* ============ 按钮 ============ */
+.row{display:flex;gap:9px}
+.row>button{flex:1}
+.row.tight>button{font-size:12.5px;padding:11px 4px;white-space:nowrap}
+button.act{border:0;border-radius:15px;padding:13px 14px;font:650 15px/1 inherit;font-family:inherit;
+  transition:transform .18s cubic-bezier(.32,.72,0,1),filter .2s;position:relative;overflow:hidden}
+button.act:active{transform:scale(.972);filter:brightness(1.04)}
+.primary{background:linear-gradient(180deg,var(--blue2),var(--blue));color:#fff;
+  box-shadow:0 1px 1px rgba(255,255,255,.45) inset,0 8px 20px rgba(10,132,255,.32)}
+.ghost{background:linear-gradient(165deg,rgba(255,255,255,.72),rgba(255,255,255,.5));color:var(--ink);
+  border:1px solid rgba(255,255,255,.75);
+  box-shadow:0 1px 1px rgba(255,255,255,.8) inset,0 4px 14px rgba(16,26,44,.08)}
+.ok{background:linear-gradient(180deg,rgba(15,159,90,.2),rgba(15,159,90,.13));color:#0b7a46;
+  border:1px solid rgba(15,159,90,.28)}
+.no{background:linear-gradient(180deg,rgba(229,72,77,.18),rgba(229,72,77,.11));color:#c62f34;
+  border:1px solid rgba(229,72,77,.26)}
+.play{width:100%;padding:20px 0;border-radius:18px;font-size:26px;letter-spacing:2px;
+  background:linear-gradient(180deg,#28313f,#141c26);color:#fff;
+  box-shadow:0 1px 1px rgba(255,255,255,.22) inset,0 10px 24px rgba(16,26,44,.3)}
+.play.slow{background:linear-gradient(180deg,#8a6cff,#6a4bd8)}
+.play:active{filter:brightness(1.12)}
+
+/* ============ 进度 / 统计 ============ */
+.bar-h{height:6px;background:rgba(118,130,152,.16);border-radius:3px;overflow:hidden;margin:12px 0 8px}
+.bar-h>i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue2),var(--blue));
+  width:0;transition:width .3s cubic-bezier(.32,.72,0,1)}
+.stats{display:flex;gap:12px;font-size:12px;color:var(--ink2);flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.stats b{color:var(--ink);font-weight:680}
+
+/* ============ 答案区 ============ */
+.ans{display:none;margin-top:12px;padding:15px;border-radius:18px;
+  background:linear-gradient(165deg,rgba(255,255,255,.7),rgba(255,255,255,.5));
+  border:1px dashed rgba(11,18,32,.18)}
+.ans.show{display:block;animation:rise .26s cubic-bezier(.32,.72,0,1)}
+.kana{font-size:29px;font-weight:680}
+.kanji{font-size:16px;color:#3a4252;margin-top:5px}
+.mean{font-size:14.5px;color:var(--red);font-weight:600;margin-top:6px}
+.tip{font-size:12.5px;color:var(--ink3);margin-top:8px;line-height:1.55}
+.flash{min-height:210px;border-radius:24px;padding:26px 16px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.7);
+  transition:transform .22s cubic-bezier(.32,.72,0,1),border-color .22s,background .22s}
+.flash:active{transform:scale(.99)}
+.flash.back{border-color:rgba(10,132,255,.4);background:linear-gradient(165deg,rgba(236,245,255,.85),rgba(255,255,255,.6))}
+.flash .q{font-size:32px;font-weight:680;text-align:center;word-break:break-all;line-height:1.3}
+.flash .a1{font-size:29px;font-weight:680;margin-top:12px}
+.flash .a2{font-size:15px;color:var(--red);font-weight:600;margin-top:6px}
+.flash .hint2{font-size:11.5px;color:var(--ink3);margin-top:14px}
+.flash .ph{width:100%;max-width:270px;border-radius:16px;margin:0 auto 10px;background:rgba(120,130,150,.12);display:block}
+#dcImg{text-align:center;margin-bottom:12px}
+#dcImg img{width:100%;max-width:330px;border-radius:16px;display:block;margin:0 auto;background:rgba(120,130,150,.12)}
+#dcImg .lb{font-size:11px;color:var(--ink3);margin-top:7px}
+.wrongbox{font-size:14px;line-height:1.9}
+.wrongbox span{display:inline-block;background:rgba(229,72,77,.12);color:#c62f34;border-radius:8px;padding:3px 9px;margin:3px;font-weight:600}
+
+/* ============ 提示条 ============ */
+.warn{border-radius:16px;padding:11px 13px;font-size:12px;color:#6b5b2e;line-height:1.6;
+  background:linear-gradient(165deg,rgba(255,250,235,.85),rgba(255,246,225,.7));border:1px solid rgba(255,224,163,.7)}
+.warn b{color:#8a6400}
+.now{font-size:11px;color:#0a63c8;font-weight:700;min-height:15px;margin:2px 0 6px}
+.link{display:block;text-align:center;font-size:13.5px;font-weight:640;color:var(--ink);border-radius:16px;
+  padding:14px;text-decoration:none;border:1px solid rgba(255,255,255,.72);
+  transition:transform .18s cubic-bezier(.32,.72,0,1)}
+.link:active{transform:scale(.985)}
+.foot{font-size:11px;color:var(--ink3);text-align:center;line-height:1.7;margin:18px 0 4px}
+.hide{display:none}
+table.all{width:100%;border-collapse:collapse;font-size:13px}
+table.all td{border-bottom:1px solid rgba(11,18,32,.07);padding:7px 4px}
+table.all td.s{text-align:right;font-size:12px;color:var(--ink3)}
+.ex2{font-size:12px;color:var(--green);margin-top:5px}
+.tip2{font-size:11px;color:#a2701a;margin-top:5px;line-height:1.45}
+#mDaku.hideH .wc .c{visibility:hidden}
+#mDaku.hideE .ex2{visibility:hidden}
+#mDaku .pair .side .k{font-size:23px}
+#dkCards{grid-template-columns:1fr 1fr}
+
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(10,132,255,.35)}70%{box-shadow:0 0 0 12px rgba(10,132,255,0)}100%{box-shadow:0 0 0 0 rgba(10,132,255,0)}}
+@keyframes rise{from{opacity:0;transform:translate3d(0,8px,0)}to{opacity:1;transform:none}}
+
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+@media (prefers-color-scheme:dark){
+  :root{--ink:#f2f5fa;--ink2:#a8b2c2;--ink3:#7f8899;--hair:rgba(255,255,255,.1);
+    --glass:linear-gradient(165deg,rgba(38,44,56,.72),rgba(28,33,44,.56));--shadow:0 1px 1px rgba(255,255,255,.06) inset,0 10px 26px rgba(0,0,0,.45)}
+  .bg{background:radial-gradient(60% 44% at 6% 0%,rgba(50,90,160,.5),transparent 62%),radial-gradient(56% 42% at 96% 96%,rgba(90,70,150,.45),transparent 62%),linear-gradient(180deg,#0d1117,#12161d 55%,#0f1319)}
+  .bg i{opacity:.35}
+  .top .tabs{background:rgba(255,255,255,.08)}
+  .tabs button.on{background:linear-gradient(180deg,#2b3240,#232936);color:#fff}
+  .card,.flash,.link,.top{background:var(--glass);border-color:rgba(255,255,255,.12)}
+  .wc,.chip,.sent,.pair .side,.warn,.ans{background:linear-gradient(165deg,rgba(48,55,68,.7),rgba(36,42,54,.6));border-color:rgba(255,255,255,.1)}
+  .ch,.tg,button.ghost{background:linear-gradient(165deg,rgba(60,68,84,.6),rgba(45,52,66,.5));color:var(--ink2);border-color:rgba(255,255,255,.12)}
+  .ch.on{background:linear-gradient(180deg,#e9eef7,#cdd6e4);color:#12161d}
+  .tg.on{background:linear-gradient(180deg,rgba(10,132,255,.3),rgba(10,132,255,.2));color:#9ecbff}
+  .warn{background:linear-gradient(165deg,rgba(70,58,22,.6),rgba(56,46,18,.5));color:#e8d59a;border-color:rgba(255,224,163,.25)}
+  .ans{background:linear-gradient(165deg,rgba(255,255,255,.08),rgba(255,255,255,.05));border-color:rgba(255,255,255,.16)}
+  .flash.back{background:linear-gradient(165deg,rgba(20,40,66,.8),rgba(18,24,34,.6))}
+  .link,button.ghost{color:var(--ink)}
+}
+</style>
+<link rel="stylesheet" href="skin.css?v=2">
+</head>
+<body class="notip">
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+<div class="top">
+  <h1>📖 日语学习台</h1>
+  <div class="sub">点读 · 默写 · 自测 · 浊音　·　69 词全离线真人发音</div>
+  <div class="tabs">
+    <button data-mode="read" class="on">📖 点读</button>
+    <button data-mode="dict">🎧 默写</button>
+    <button data-mode="card">🃏 自测</button>
+    <button data-mode="daku">⚡ 浊音</button>
+  </div>
+</div>
+
+<!-- ============ 点读 ============ -->
+<div id="mRead">
+  <div class="chips" id="rdScope">
+    <button class="ch on" data-s="right">右栏 21 词</button>
+    <button class="ch" data-s="left">左栏 21 词</button>
+    <button class="ch" data-s="w2">📚 生词表2 18 词</button>
+    <button class="ch" data-s="pic">📷 看图识词 9 词</button>
+    <button class="ch" data-s="sent">例句·语法</button>
+    <button class="ch" data-s="more">～屋 / 称谓</button>
+  </div>
+  <div class="toggles">
+<button class="tg engbtn on">🎧 真人音</button>
+    <button class="tg" id="tgSlow">🐢 慢速</button>
+    <button class="tg on" id="tgCn">👁 中文</button>
+    <button class="tg on" id="tgKanji">👁 汉字</button>
+    <button class="tg on" id="tgKana">👁 假名</button>
+    <button class="tg" id="tg2">🔂 连读两遍</button>
+    <button class="tg" id="tgTip">💡 助记</button>
+  </div>
+  <div class="now" id="rdNow"></div>
+  <div id="rdView" style="margin-top:8px"></div>
+  <div class="row" style="margin:12px 0 4px">
+    <button class="act primary" id="rdAll">▶️ 连读本页</button>
+    <button class="act ghost" id="rdStop" style="flex:0 0 90px">⏹ 停</button>
+  </div>
+  <div class="warn" style="margin-top:8px">没声音：先拨开手机<b>静音键</b>、调大音量再点一次。</div>
+</div>
+
+<!-- ============ 听读默写 ============ -->
+<div id="mDict" class="hide">
+  <div class="chips" id="dcScope">
+    <button class="ch on" data-s="right">右栏 21 词</button>
+    <button class="ch" data-s="left">左栏 21 词</button>
+    <button class="ch" data-s="w2">📚 生词表2 18 词</button>
+    <button class="ch" data-s="pic">📷 看图识词 9 词</button>
+    <button class="ch" data-s="all">全部 42 词</button>
+    <button class="ch" data-s="wrong">上次错的 <span id="dcWrongN">0</span></button>
+  </div>
+  <div class="toggles">
+<button class="tg engbtn on">🎧 真人音</button>
+    <button class="tg" id="dcSlow">🐢 慢速</button>
+    <button class="tg on" id="dcShuf">🔀 随机顺序</button>
+    <button class="tg on" id="dcAuto">▶️ 自动出声</button>
+    <button class="tg" id="dcDbl">🔂 连读两遍</button>
+    <button class="tg on" id="dcPic">📷 看图提示</button>
+  </div>
+  <div class="card" style="margin-top:10px">
+    <div class="bar-h"><i id="dcFill"></i></div>
+    <div class="stats">
+      <span>本轮 <b id="dcPos">0</b>/<b id="dcTot">0</b></span>
+      <span>✅ <b id="dcOk">0</b></span>
+      <span>❌ <b id="dcNo">0</b></span>
+      <span>待重默 <b id="dcQ">0</b></span>
+      <span id="dcRound" style="color:#2f7cf6;font-weight:700">第 1 轮</span>
+    </div>
+  </div>
+  <div class="card hide" id="dcQuiz">
+    <div id="dcImg" class="hide"></div>
+    <div class="play" id="dcPlay">🔊 听一遍</div>
+    <div class="ans" id="dcAns">
+      <div class="kana" id="dcKana">—</div>
+      <div class="kanji" id="dcKanji"></div>
+      <div class="mean" id="dcMean"></div>
+      <div class="tip" id="dcTipv"></div>
+    </div>
+    <div class="row" style="margin-top:12px"><button class="act ghost" id="dcShow">👀 对答案</button></div>
+    <div class="row" style="margin-top:8px">
+      <button class="act ok" id="dcOkBtn">✅ 对了</button>
+      <button class="act no" id="dcNoBtn">❌ 错了 → 重默</button>
+    </div>
+  </div>
+  <div class="card" id="dcStart">
+    <div class="row"><button class="act primary" id="dcGo">开始默写</button></div>
+    <div class="row" style="margin-top:8px"><button class="act ghost" id="dcWarm">👂 听读热身（顺序朗读本页）</button></div>
+    <div class="row" style="margin-top:8px"><button class="act ghost" id="dcOnlyW">🔁 只默上次错的</button></div>
+    <div class="warn" style="margin-top:10px">听 → 纸上写【假名＋汉字】→ 对答案自评。<b>判 ❌ 别心软</b>：错的自动进队列，重默到清空。</div>
+  </div>
+  <div class="card hide" id="dcDone">
+    <div style="text-align:center">
+      <div style="font-size:14px;color:#5b6270">本轮结束</div>
+      <div style="font-size:40px;font-weight:800;margin:6px 0" id="dcScore">—</div>
+      <div style="font-size:13px;color:#8a919c" id="dcDetail"></div>
+    </div>
+    <div class="wrongbox" id="dcWrongBox" style="margin-top:10px"></div>
+    <div class="row" style="margin-top:12px"><button class="act primary" id="dcReW">🔁 默这些错的</button></div>
+    <div class="row" style="margin-top:8px">
+      <button class="act ghost" id="dcAgain">↩️ 再来一遍</button>
+      <button class="act ghost" id="dcCopy">📋 复制错词</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 自测卡 ============ -->
+<div id="mCard" class="hide">
+  <div class="chips" id="cdScope">
+    <button class="ch on" data-s="right">右栏 21 词</button>
+    <button class="ch" data-s="left">左栏 21 词</button>
+    <button class="ch" data-s="w2">📚 生词表2 18 词</button>
+    <button class="ch" data-s="pic">📷 看图识词 9 词</button>
+    <button class="ch" data-s="all">全部 42 词</button>
+    <button class="ch" data-s="wrong">上次不会的 <span id="cdWrongN">0</span></button>
+  </div>
+  <div class="toggles">
+<button class="tg engbtn on">🎧 真人音</button>
+    <button class="tg on" id="cdM1">中 → 日</button>
+    <button class="tg" id="cdM2">假名 → 汉字</button>
+    <button class="tg" id="cdM3">假名 → 中</button>
+    <button class="tg" id="cdShuf">🔀 乱序</button>
+    <button class="tg on" id="cdPic">📷 看图</button>
+  </div>
+  <div class="stats" style="margin:10px 0 0"><span>剩余 <b id="cdPos">0</b> / 共 <b id="cdTot">0</b></span>
+    <span>✅ 会了 <b id="cdOk">0</b></span><span>❌ 不会 <b id="cdNo">0</b></span></div>
+  <div class="flash" id="cdFlash" style="margin-top:10px">
+    <div class="q" id="cdQ">点这里开始</div>
+    <div class="a1 hide" id="cdA1"></div>
+    <div class="a2 hide" id="cdA2"></div>
+    <div class="hint2" id="cdHint">点卡片翻面</div>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <button class="act ok" id="cdOkBtn">✅ 会了</button>
+    <button class="act no" id="cdNoBtn">❌ 不会</button>
+  </div>
+  <div class="row tight" style="margin-top:8px">
+    <button class="act ghost" id="cdFlip">🔁 翻面</button>
+    <button class="act ghost" id="cdOnlyN">✕ 只练不会的 (<span id="cdQueueN">0</span>)</button>
+    <button class="act ghost" id="cdReset">↩ 全部</button>
+  </div>
+  <div class="card" style="margin-top:10px">
+    <div class="row tight"><button class="act ghost" id="cdTable">📋 全表速览</button><button class="act ghost" id="cdPlayAll">▶️ 连读全部</button></div>
+    <div id="cdTableView" class="hide" style="margin-top:10px"></div>
+  </div>
+</div>
+
+
+<!-- ============ 浊音 · 半浊音 ============ -->
+<div id="mDaku" class="hide">
+  <div class="warn" style="margin-bottom:8px">かさたは 加<b>两点゛</b>变浊；は行例外，加<b>圈゜</b>变ぱ。真例外只有 し→じ／ち→ぢ、す→ず／つ→づ。</div>
+  <div class="chips" id="dkSub">
+    <button class="ch on" data-k="read">🔊 对比跟读</button>
+    <button class="ch" data-k="ear">🎯 听辨</button>
+    <button class="ch" data-k="dict">✍️ 听写</button>
+  </div>
+  <div class="now" id="dkToast"></div>
+
+  <!-- A 跟读 -->
+  <div id="dkRead">
+    <div class="chips" id="dkScopeR">
+      <button class="ch on" data-s="all">全部 25</button>
+      <button class="ch" data-s="daku">浊音 20</button>
+      <button class="ch" data-s="han">半浊音 5</button>
+    </div>
+    <div class="toggles">
+<button class="tg engbtn on">🎧 真人音</button>
+      <button class="tg" id="dkSlow">🐢 慢速</button>
+      <button class="tg on" id="dkCn">👁 谐音</button>
+      <button class="tg on" id="dkEx">👁 例词</button>
+      <button class="tg" id="dkDbl">🔂 连读两遍</button>
+    </div>
+    <div class="sec">清 ↔ 浊 最小对立（点哪边读哪边 · 耳朵的战场）</div>
+    <div id="dkPairs"></div>
+    <div class="sec">单个浊音（点＝读 · 长按＝慢速）</div>
+    <div id="dkCards" class="grid"></div>
+    <div class="row" style="margin:12px 0 4px">
+      <button class="act primary" id="dkAll">▶️ 连读全部</button>
+      <button class="act ghost" id="dkStop" style="flex:0 0 90px">⏹ 停</button>
+    </div>
+    <div class="warn" style="margin-top:8px">手贴喉头念：<b>か 不振、が 振 —— 振才对</b>。</div>
+  </div>
+
+  <!-- B 听辨 -->
+  <div id="dkEar" class="hide">
+    <div class="chips" id="dkScopeE">
+      <button class="ch on" data-s="all">全部 30 对</button>
+      <button class="ch" data-s="が行">か↔が</button>
+      <button class="ch" data-s="ざ行">さ↔ざ</button>
+      <button class="ch" data-s="だ行">た↔だ</button>
+      <button class="ch" data-s="ば行">は↔ば</button>
+      <button class="ch" data-s="ぱ行（は↔ぱ）">は↔ぱ</button>
+      <button class="ch" data-s="ば↔ぱ（最难）">ば↔ぱ（最难）</button>
+    </div>
+    <div class="card">
+      <div class="stats">
+        <span>第 <b id="dkEarN">0</b> 题</span><span>✅ <b id="dkEarOk">0</b></span>
+        <span>❌ <b id="dkEarNo">0</b></span><span>正确率 <b id="dkEarPct">—</b></span>
+      </div>
+      <div class="bar-h"><i id="dkEarBar"></i></div>
+      <div style="font-size:12px;color:#8a919c;line-height:1.5" id="dkEarRow">30 对最小对立 · 每个音都要 ≥90% 才算耳朵过关</div>
+    </div>
+    <div class="card">
+      <div class="row"><button class="act play" id="dkEarPlay">🔊 听 / 重播</button></div>
+      <div class="row" style="margin-top:10px">
+        <button class="act ghost" id="dkOptA" style="font-size:30px;padding:18px 0">—</button>
+        <button class="act ghost" id="dkOptB" style="font-size:30px;padding:18px 0">—</button>
+      </div>
+      <div style="font-size:12px;color:#8a919c;text-align:center;margin-top:10px;min-height:17px" id="dkEarMsg">点「听」开始</div>
+    </div>
+    <div class="card" id="dkEarSum" style="display:none"></div>
+  </div>
+
+  <!-- C 听写 -->
+  <div id="dkDict" class="hide">
+    <div class="chips" id="dkScopeD">
+      <button class="ch on" data-s="daku">浊音 20</button>
+      <button class="ch" data-s="han">半浊音 5</button>
+      <button class="ch" data-s="all">全部 25</button>
+      <button class="ch" data-s="wrong">上次错的 <span id="dkWrongN">0</span></button>
+    </div>
+    <div class="toggles">
+<button class="tg engbtn on">🎧 真人音</button>
+      <button class="tg on" id="dkMix">🔀 清浊混出</button>
+      <button class="tg" id="dkTimer">⚡ 限时 1.5 秒</button>
+      <button class="tg" id="dkSlow2">🐢 慢速</button>
+      <button class="tg" id="dkWord">🔤 改为听例词</button>
+    </div>
+    <div class="card" style="margin-top:10px">
+      <div class="bar-h"><i id="dkFill"></i></div>
+      <div class="stats">
+        <span>本轮 <b id="dkPos">0</b>/<b id="dkTot">0</b></span><span>✅ <b id="dkOk">0</b></span>
+        <span>❌ <b id="dkNo">0</b></span><span>待重写 <b id="dkQ">0</b></span>
+        <span id="dkRound" style="color:#2f7cf6;font-weight:700">第 1 轮</span>
+      </div>
+    </div>
+    <div class="card" id="dkStart">
+      <div class="row"><button class="act primary" id="dkGo">开始听写</button></div>
+      <div class="row" style="margin-top:8px"><button class="act ghost" id="dkOnlyW">🔁 只写上次错的</button></div>
+      <div class="warn" style="margin-top:10px">听 → 纸上写 → 对答案自评，错的自动进队列重默到清空。<b>开了「⚡限时」</b>＝口头认读：1.5 秒内点不掉就算错。</div>
+    </div>
+    <div class="card hide" id="dkQuiz">
+      <div class="play" id="dkPlay">🔊 听一遍</div>
+      <div class="bar-h" id="dkTbar" style="display:none"><i style="background:#e35555;width:100%"></i></div>
+      <div class="ans" id="dkAns">
+        <div class="kana" id="dkKana">—</div>
+        <div class="kanji" id="dkHintRow"></div>
+        <div class="mean" id="dkMean"></div>
+        <div class="tip" id="dkTipv"></div>
+      </div>
+      <div class="row" style="margin-top:12px"><button class="act ghost" id="dkShow">👀 对答案</button></div>
+      <div class="row" style="margin-top:8px">
+        <button class="act ok" id="dkOkBtn">✅ 写对了</button>
+        <button class="act no" id="dkNoBtn">❌ 错了 → 重写</button>
+      </div>
+    </div>
+    <div class="card hide" id="dkDone">
+      <div style="text-align:center">
+        <div style="font-size:14px;color:#5b6270">本轮结束</div>
+        <div style="font-size:40px;font-weight:800;margin:6px 0" id="dkScore">—</div>
+        <div style="font-size:13px;color:#8a919c;line-height:1.6" id="dkDetail"></div>
+      </div>
+      <div class="wrongbox" id="dkWrongBox" style="margin-top:10px"></div>
+      <div class="row" style="margin-top:12px"><button class="act primary" id="dkReW">🔁 只练这些错的</button></div>
+      <div class="row" style="margin-top:8px">
+        <button class="act ghost" id="dkAgain">↩️ 再来一遍</button>
+        <button class="act ghost" id="dkCopy">📋 复制错词</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:12px">
+  <div class="sec" style="margin:0 0 10px">发音对比 · 打印纸</div>
+  <a class="link" href="index.html">🏠 回入口 · 选今天要默的</a>
+  <div style="height:8px"></div>
+  <a class="link" href="%E8%AF%AD%E9%9F%B3%E5%AF%B9%E6%AF%94.html">🎧 发音对比 · 真人／神经／系统</a>
+  <div style="height:8px"></div>
+  <a class="link" href="%E5%90%AC%E8%AF%BB%E9%BB%98%E5%86%99%E7%BA%B8.html">📄 听读默写纸（含答案页）</a>
+  <div style="height:8px"></div>
+  <a class="link" href="%E5%90%AC%E5%86%99%E7%BA%B8.html">📄 听写纸（顺序／乱序）</a>
+</div>
+
+<div class="foot">数据源 词表.js ｜ 改词只改那一处</div>
+
+<script src="ambient_data.js?v=1"></script>
+<script src="ambient.js?v=1"></script>
+<script src="%E9%9F%B3%E9%A2%91%E7%B4%A2%E5%BC%95.js?v=0923k"></script>
+<script src="%E8%AF%8D%E8%A1%A8.js?v=0923k"></script>
+<script src="%E6%97%A5%E8%AF%AD.js?v=0923k"></script>
+</body>
+</html>
