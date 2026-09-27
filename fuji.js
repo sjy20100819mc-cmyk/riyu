@@ -346,86 +346,110 @@
      静态光照只算一次存进纹理；每帧只算会动的：云、星、湖面波浪反射（菲涅尔）、日月高光、湖雾、丁达尔光束
      ================================================================ */
   var RTP = {
-    day:   { zen: [0.16, 0.36, 0.72], hor: [0.66, 0.80, 0.93], sun: [1.55, 1.45, 1.30], fog: [0.62, 0.74, 0.86], light: [-0.45, 0.62, -0.64],
+    day:   { zen: [0.16, 0.36, 0.72], hor: [0.66, 0.80, 0.93], sun: [1.55, 1.45, 1.30], fog: [0.64, 0.75, 0.86], light: [-0.78, 0.42, -0.2],
              disk: [556, 36], diskCol: [3, 2.9, 2.6], diskOn: 0, night: 0, cloud: 0.55, god: 0 },
     dawn:  { zen: [0.09, 0.10, 0.24], hor: [1.15, 0.62, 0.42], sun: [1.70, 0.82, 0.52], fog: [0.78, 0.56, 0.52], light: [0.85, 0.12, -0.5],
-             disk: [552, 206], diskCol: [3.2, 2.2, 1.4], diskOn: 1, night: 0, cloud: 0.5, god: 0.5 },
+             disk: [560, 160], diskCol: [2.0, 1.4, 0.95], diskOn: 1, night: 0, cloud: 0.5, god: 0.5 },
     dusk:  { zen: [0.11, 0.07, 0.20], hor: [1.35, 0.55, 0.24], sun: [1.90, 0.76, 0.34], fog: [0.72, 0.42, 0.30], light: null,
-             disk: [268, 212], diskCol: [3.5, 2.2, 1.1], diskOn: 1, night: 0, cloud: 0.5, god: 0.6 },
-    night: { zen: [0.004, 0.008, 0.025], hor: [0.03, 0.055, 0.12], sun: [0.20, 0.24, 0.34], fog: [0.03, 0.05, 0.10], light: [0.45, 0.5, -0.35],
-             disk: [548, 60], diskCol: [1.6, 1.6, 1.5], diskOn: 1, night: 1, cloud: 0.25, god: 0.12 }
+             disk: [262, 163], diskCol: [2.3, 1.45, 0.75], diskOn: 1, night: 0, cloud: 0.5, god: 0.6 },
+    night: { zen: [0.008, 0.014, 0.04], hor: [0.05, 0.08, 0.16], sun: [0.34, 0.4, 0.55], fog: [0.06, 0.085, 0.15], light: [0.45, 0.5, -0.35],
+             disk: [548, 36], diskCol: [1.3, 1.3, 1.25], diskOn: 1, night: 1, cloud: 0.25, god: 0.12 }
   };
+  var HYG = 170;                                                          // 光追画面的地平线（虚拟坐标）
   var RT_FOL = { spring: [0.20, 0.24, 0.14], summer: [0.07, 0.17, 0.06], autumn: [0.34, 0.15, 0.06], winter: [0.09, 0.12, 0.09] };
   var RT_SNOW = { winter: 0.8, spring: 1.4, autumn: 2.05, summer: 2.7 };
   var GLSL_COMMON = [
     'precision highp float;',
     'uniform vec2 uRes; uniform vec3 uMap; uniform float uTime;',
     'uniform vec3 uZen, uHor, uSunCol, uFog, uL, uDisk, uDiskCol, uFol;',
-    'uniform vec4 uP;',                                   // x 夜晚 y 雪线 z 云量 w 是否显示日/月
+    'uniform vec4 uP; uniform vec4 uQ;',                                   // x 夜晚 y 雪线 z 云量 w 是否显示日/月
     'const float K = 0.14 / 150.0;',
-    'const vec2 FC = vec2(0.0, 20.0);',
+    'const vec2 FC = vec2(0.0, 26.0);',
+    'const float HZ = 170.0;',
     'float hash(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }',
     'float noise(vec2 p){ vec2 i = floor(p), f = fract(p); vec2 u = f * f * (3.0 - 2.0 * f);',
     '  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y); }',
     'const mat2 M2 = mat2(1.6, 1.2, -1.2, 1.6);',
     'float fbm3(vec2 p){ float s = 0.0, a = 0.5; for (int i = 0; i < 3; i++) { s += a * noise(p); p = M2 * p; a *= 0.5; } return s / 0.875; }',
     'float fbm5(vec2 p){ float s = 0.0, a = 0.5; for (int i = 0; i < 5; i++) { s += a * noise(p); p = M2 * p; a *= 0.5; } return s / 0.96875; }',
-    'vec3 tone(vec3 c){ c = 1.0 - exp(-c * 1.15); return pow(c, vec3(0.95)); }',
+    'vec3 tone(vec3 c){ c *= 0.92; c = clamp((c * (2.51 * c + 0.03)) / (c * (2.43 * c + 0.59) + 0.14), 0.0, 1.0);',
+    '  float l = dot(c, vec3(0.299, 0.587, 0.114)); return clamp(mix(vec3(l), c, 1.1), 0.0, 1.0); }',
     'vec3 rayDir(vec2 fc){ float vx = (fc.x - uMap.y) / uMap.x; float vy = ((uRes.y - fc.y) - uMap.z) / uMap.x;',
-    '  return normalize(vec3((vx - 400.0) * K, (220.0 - vy) * K, 1.0)); }',
+    '  return normalize(vec3((vx - 400.0) * K, (HZ - vy) * K, 1.0)); }',
     /* 天空：瑞利渐变 + 米氏光晕 + 日/月盘 + 星空 + 体积感的云（向光方向再采样一次得到明暗） */
     'vec3 sky(vec3 rd){',
     '  float y = max(rd.y, 0.0);',
     '  vec3 col = mix(uHor, uZen, pow(smoothstep(0.0, 0.4, y), 0.7));',
     '  float ld = max(dot(rd, uL), 0.0), sd = max(dot(rd, uDisk), 0.0);',
     '  col += uSunCol * (0.12 * pow(ld, 5.0) + 0.35 * pow(ld, 60.0)) * (1.0 - uP.x * 0.6);',
-    '  col += uDiskCol * uP.w * (0.08 * pow(sd, 12.0) + 0.25 * pow(sd, 200.0));',
-    '  col += uDiskCol * uP.w * smoothstep(0.99990, 0.99996, sd) * 3.0;',
+    '  col += uDiskCol * uP.w * (0.05 * pow(sd, 16.0) + 0.2 * pow(sd, 260.0)) * (1.0 - uP.x * 0.75);',
+    '  col += uDiskCol * uP.w * smoothstep(mix(0.99990, 0.999965, uP.x), mix(0.99996, 0.99999, uP.x), sd) * 3.0;',
     '  if (uP.x > 0.5) { vec2 sp = rd.xy / (1.0 + rd.z) * 260.0; vec2 id = floor(sp); float h = hash(id);',
     '    if (h > 0.982) { vec2 f = fract(sp) - 0.5; float tw = 0.55 + 0.45 * sin(uTime * (1.0 + h * 3.0) + h * 80.0);',
     '      col += vec3(0.9, 0.95, 1.0) * smoothstep(0.22, 0.0, length(f)) * tw * 1.5 * smoothstep(0.0, 0.08, y); } }',
     '  if (rd.y > 0.003) {',
-    '    float tc = 2.4 / rd.y; vec2 cp = rd.xz * tc * 0.05 + vec2(uTime * 0.004, uTime * 0.0015);',
-    '    float c = fbm5(cp);',
-    '    float cov = smoothstep(0.64, 0.92, c + uP.z * 0.1 - 0.06) * smoothstep(0.55, 0.15, y);',
-    '    float c2 = fbm5(cp + uL.xz * 0.08);',
-    '    float lit = clamp((c - c2) * 4.0 + 0.55, 0.0, 1.0);',
-    '    vec3 cc = mix(uHor * 0.5 + uZen * 0.18, uSunCol * 1.1 + uHor * 0.3, lit);',
-    '    cc += uSunCol * pow(ld, 8.0) * 0.6 * (1.0 - cov);',               // 靠近太阳的云边发亮
-    '    col = mix(col, cc, cov * exp(-tc * 0.006) * 0.85);',
+    '    float tc = 2.4 / rd.y; vec2 cp = rd.xz * tc * 0.045 + vec2(uTime * 0.004, uTime * 0.0015);',
+    '    vec2 wq = vec2(fbm3(cp * 0.7), fbm3(cp * 0.7 + 5.2));',                // 扭曲坐标，云形更自然
+    '    float c = fbm5(cp + wq * 1.2);',
+    '    float cov = smoothstep(0.6, 0.86, c + uP.z * 0.1 - 0.06) * smoothstep(0.6, 0.18, y) * smoothstep(0.004, 0.035, y);',
+    '    float c2 = fbm5(cp + wq * 1.2 + uL.xz * 0.06);',                      // 朝光源再采样一次：云的明暗
+    '    float lit = clamp((c - c2) * 5.0 + 0.5, 0.0, 1.0);',
+    '    vec3 cc = mix(uHor * 0.55 + uZen * 0.2, uSunCol * 1.15 + uHor * 0.35, lit);',
+    '    cc += uSunCol * pow(ld, 8.0) * 0.8 * (1.0 - cov);',                    // 靠近太阳的云边发亮
+    '    col = mix(col, cc, cov * exp(-tc * 0.005) * 0.9);',
     '  }',
     '  return col;',
     '}'
   ].join('\n');
   var GLSL_STATIC = GLSL_COMMON + '\n' + [
-    'float fujiBase(vec2 p){ float r = length(p - FC); return min(3.1 * exp(-r / 5.0) - 0.06, 2.93); }',
-    'float gully(vec2 p){ vec2 d = p - FC; vec2 q = normalize(d + 1e-4) * 12.0 + d * 0.04 + noise(p * 0.6) * 0.8;',
-    '  return 1.0 - abs(noise(q) * 2.0 - 1.0); }',                         // 1 = 山脊，0 = 沟底
+    'float fujiBase(vec2 p){ float r = length(p - FC); float rim = 2.92 + (noise(p * 5.0) - 0.5) * 0.04; return min(3.1 * exp(-r / 5.0) - 0.06, rim); }',
+    'float ridged(vec2 q){ return 1.0 - abs(noise(q) * 2.0 - 1.0); }',
+    /* 放射状侵蚀沟：三层粗细叠加，1 = 山脊，0 = 沟底 */
+    'float gully(vec2 p){ vec2 d = p - FC; float r = max(length(d), 1e-3); vec2 dir = d / r;',
+    '  vec2 w = vec2(noise(p * 0.45), noise(p * 0.45 + 7.1)) * 0.7;',
+    '  return ridged(dir * 14.0 + w) * 0.6 + ridged(dir * 33.0 + w * 2.2) * 0.3 + ridged(dir * 70.0 + w * 3.0) * 0.1; }',
     'float fujiDetail(vec2 p){ float r = length(p - FC);',
-    '  return (gully(p) - 0.55) * 0.07 * smoothstep(0.3, 1.8, r) * exp(-r / 6.0) + (fbm3(p * 2.5) - 0.5) * 0.03 * exp(-r / 8.0); }',
-    'float hills(vec2 p){ return fbm3(p * 0.28) * 0.55 + fbm3(p * 1.3 + 3.0) * 0.08 - 0.12; }',
-    'float lakeM(vec2 p){ vec2 q = p - vec2(0.0, 3.2); q.x *= 0.3; return smoothstep(3.8, 5.0, length(q)); }',
+    '  return (gully(p) - 0.62) * 0.08 * smoothstep(0.25, 1.4, r) * exp(-r / 5.5) + (fbm3(p * 3.0) - 0.5) * 0.03 * exp(-r / 8.0); }',
+    'float hills(vec2 p){ return fbm3(p * 0.22) * 0.42 + fbm3(p * 0.9 + 3.0) * 0.04 - 0.1; }',
+    'float lakeM(vec2 p){ vec2 q = p - vec2(0.0, 4.2); q.x *= 0.26; return smoothstep(4.8, 6.2, length(q)); }',
+    /* 近处湖岸的小山（左下角），上面是一棵棵树冠 */
+    'float nearHill(vec2 p){ vec2 q = (p - vec2(-0.5, 1.35)) * vec2(0.8, 2.6); return 0.085 * exp(-dot(q, q) * 2.2) - 0.012; }',
+    'vec3 cell(vec2 p){ vec2 c = p * 55.0, i = floor(c), f = fract(c); float m = 8.0; vec2 id = i;',
+    '  for (int y = -1; y <= 1; y++) for (int x = -1; x <= 1; x++) { vec2 o = vec2(float(x), float(y));',
+    '    vec2 rr = o + vec2(hash(i + o), hash(i + o + 3.7)) * 0.9 - f; float dd = dot(rr, rr); if (dd < m) { m = dd; id = i + o; } }',
+    '  return vec3(sqrt(m), id); }',
+    'float canopy(vec2 p){ vec3 c = cell(p); return (1.0 - smoothstep(0.0, 0.8, c.x)) * 0.008 * (0.6 + 0.8 * hash(c.yz)); }',
     'float Hlo(vec2 p){ return mix(-0.05, max(fujiBase(p), hills(p)), lakeM(p)); }',
-    'float Hhi(vec2 p){ return mix(-0.05, max(fujiBase(p) + fujiDetail(p), hills(p) + (fbm3(p * 6.0) - 0.5) * 0.02), lakeM(p)); }',
+    'float Hhi(vec2 p){ return mix(-0.05, max(fujiBase(p) + fujiDetail(p), hills(p) + (fbm3(p * 5.0) - 0.5) * 0.012), lakeM(p)); }',
     /* 软阴影：朝光源再走一条射线，离地面越近越暗 */
-    'float shadow(vec3 ro, vec3 rd){ float res = 1.0, t = 0.03;',
-    '  for (int i = 0; i < 40; i++) { vec3 p = ro + rd * t; float h = p.y - Hlo(p.xz); res = min(res, 10.0 * h / t);',
-    '    if (res < 0.002) break; t += clamp(h * 0.7, 0.03, 0.8); if (t > 30.0) break; }',
+    'float shadow(vec3 ro, vec3 rd){ float res = 1.0, t = 0.02;',
+    '  for (int i = 0; i < 48; i++) { vec3 p = ro + rd * t; float h = p.y - Hlo(p.xz); res = min(res, 12.0 * h / t);',
+    '    if (res < 0.002) break; t += clamp(h * 0.6, 0.015, 0.7); if (t > 30.0) break; }',
     '  return clamp(res, 0.0, 1.0); }',
+    'vec3 treeCol(float h){',
+    '  if (uQ.x < 0.5) return h < 0.62 ? mix(vec3(0.92, 0.66, 0.74), vec3(0.98, 0.84, 0.88), h / 0.62) : vec3(0.22, 0.33, 0.16);',   // 春：樱花
+    '  if (uQ.x < 1.5) return mix(vec3(0.08, 0.2, 0.06), vec3(0.2, 0.36, 0.12), h);',
+    '  if (uQ.x < 2.5) return h < 0.3 ? vec3(0.62, 0.1, 0.04) : h < 0.55 ? vec3(0.82, 0.34, 0.07) : h < 0.78 ? vec3(0.86, 0.6, 0.14) : vec3(0.2, 0.3, 0.12);',  // 秋：红叶/黄叶/常绿
+    '  return h < 0.55 ? vec3(0.09, 0.15, 0.11) : vec3(0.86, 0.9, 0.95); }',    // 冬：针叶 + 积雪
     'vec3 shade(vec3 p, vec3 n, vec3 rd){',
-    '  float g = gully(p.xz);',
-    '  float sl = uP.y + (fbm3(p.xz * 1.8) - 0.5) * 0.45 - (1.0 - g) * 0.35;',  // 雪顺着沟往下流
-    '  float snow = smoothstep(sl - 0.06, sl + 0.06, p.y) * smoothstep(0.35, 0.6, n.y);',
-    '  vec3 rock = mix(vec3(0.20, 0.17, 0.16), vec3(0.32, 0.25, 0.22), fbm3(p.xz * 4.0));',
-    '  float forest = smoothstep(1.45, 1.05, p.y + (fbm3(p.xz * 3.0) - 0.5) * 0.3) * smoothstep(0.45, 0.7, n.y);',
-    '  vec3 fol = uFol * (0.55 + 0.9 * fbm3(p.xz * 9.0));',
-    '  vec3 alb = mix(mix(rock, fol, forest), vec3(0.9, 0.93, 0.97), snow);',
+    '  vec3 alb; float ao = 1.0, snow = 0.0;',
+    '  {',
+    '    float g = gully(p.xz); ao = mix(0.78, 1.0, g);',
+    '    vec2 d = p.xz - FC; vec2 dir = d / max(length(d), 1e-3);',
+    '    float sl = uP.y + (fbm3(p.xz * 1.8) - 0.5) * 0.45 - (1.0 - g) * 0.42 * (0.4 + 1.2 * noise(dir * 9.0 + 3.0)) - (fbm3(p.xz * 7.0) - 0.5) * 0.18;',  // 雪顺沟下流，细纹
+    '    snow = smoothstep(sl - 0.09, sl + 0.07, p.y) * smoothstep(0.2, 0.55, n.y);',
+    '    vec3 rock = mix(vec3(0.26, 0.17, 0.14), vec3(0.4, 0.28, 0.22), fbm3(p.xz * 4.0) * 0.6 + noise(dir * 60.0) * 0.4) * mix(0.75, 1.0, g);',
+    '    float forest = smoothstep(1.35, 0.95, p.y + (fbm3(p.xz * 2.0) - 0.5) * 0.25) * smoothstep(0.3, 0.6, n.y);',
+    '    vec3 fol = mix(vec3(0.045, 0.075, 0.05), treeCol(fbm3(p.xz * 2.0)) * 0.22, uQ.x > 1.5 && uQ.x < 2.5 ? 0.3 : 0.12) * (0.85 + 0.3 * fbm3(p.xz * 3.0));',
+    '    alb = mix(mix(rock, fol, forest), vec3(0.93, 0.95, 0.98), snow);',
+    '  }',
     '  float dif = max(dot(n, uL), 0.0);',
-    '  float sh = dif > 0.0 ? shadow(p + n * 0.004, uL) : 0.0;',
-    '  vec3 amb = mix(uHor, uZen, 0.5 + 0.5 * n.y);',
-    '  vec3 col = alb * (uSunCol * dif * sh * 1.5 + amb * 0.45);',
-    '  col += alb * uFog * 0.08 * (1.0 - n.y);',                             // 湖面反射上来的补光
-    '  col += uSunCol * pow(max(dot(reflect(rd, n), uL), 0.0), 24.0) * snow * sh * 0.35;',   // 雪面高光
+    '  float sh = dif > 0.0 ? shadow(p + n * 0.003, uL) : 0.0;',
+    '  vec3 amb = mix(uHor * 0.9, uZen * 1.1, 0.5 + 0.5 * n.y);',
+    '  vec3 col = alb * (uSunCol * dif * sh * 1.9 + amb * 0.38 * ao);',
+    '  col += alb * uFog * 0.08 * (1.0 - n.y) * ao;',                                   // 湖面反射上来的补光
+    '  col += uSunCol * pow(max(dot(reflect(rd, n), uL), 0.0), 28.0) * snow * sh * 0.4;',   // 雪面高光
+    '  col += snow * uZen * 0.12 * (1.0 - sh) * ao;',                                    // 阴影里的雪偏蓝
     '  return col;',
     '}',
     'void main(){',
@@ -442,19 +466,21 @@
     '  vec3 n = normalize(vec3(Hhi(p.xz - vec2(e, 0.0)) - Hhi(p.xz + vec2(e, 0.0)), 2.0 * e, Hhi(p.xz - vec2(0.0, e)) - Hhi(p.xz + vec2(0.0, e))));',
     '  vec3 col = shade(p, n, rd);',
     '  float ld = max(dot(rd, uL), 0.0);',
-    '  col = mix(col, uFog + uSunCol * pow(ld, 6.0) * 0.35, 1.0 - exp(-t * 0.036));',   // 空气透视
+    '  col = mix(col, uFog + uSunCol * pow(ld, 6.0) * 0.35, 1.0 - exp(-t * 0.021));',   // 空气透视
     '  gl_FragColor = vec4(tone(col), 1.0);',
     '}'
   ].join('\n');
   var GLSL_FRAME = GLSL_COMMON + '\n' + [
     'uniform sampler2D uTex; uniform vec2 uSunUV; uniform float uGod; uniform vec4 uRip[4];',
     'vec2 waves(vec2 p, float d){ vec2 g = vec2(0.0);',
-    '  g += vec2(0.8, 0.6) * cos(dot(p, vec2(0.8, 0.6)) * 18.0 + uTime * 1.6);',
-    '  g += vec2(-0.5, 0.86) * cos(dot(p, vec2(-0.5, 0.86)) * 31.0 + uTime * 2.1) * 0.6;',
-    '  g += vec2(0.2, 0.98) * cos(dot(p, vec2(0.2, 0.98)) * 47.0 - uTime * 2.7) * 0.4;',
-    '  g += vec2(0.95, -0.3) * cos(dot(p, vec2(0.95, -0.3)) * 73.0 + uTime * 3.3) * 0.25;',
-    '  g += (vec2(noise(p * 9.0 + uTime * 0.5), noise(p * 9.0 - uTime * 0.4)) - 0.5) * 1.2;',
-    '  return g * 0.012 / (1.0 + d * 0.25); }',
+    '  vec2 wp = p + (vec2(noise(p * 3.0 + uTime * 0.2), noise(p * 3.0 - uTime * 0.2)) - 0.5) * 0.4;',
+    '  g += vec2(0.8, 0.6) * cos(dot(wp, vec2(0.8, 0.6)) * 23.0 + uTime * 1.6) * 0.5;',
+    '  g += vec2(-0.5, 0.86) * cos(dot(wp, vec2(-0.5, 0.86)) * 37.0 + uTime * 2.1) * 0.35;',
+    '  g += vec2(0.2, 0.98) * cos(dot(wp, vec2(0.2, 0.98)) * 59.0 - uTime * 2.7) * 0.25;',
+    '  g += (vec2(noise(p * 9.0 + uTime * 0.5), noise(p * 9.0 - uTime * 0.4)) - 0.5) * 1.6;',
+    '  g += (vec2(noise(p * 31.0 - uTime * 0.9), noise(p * 31.0 + uTime * 0.8)) - 0.5) * 0.9;',
+    '  g += (vec2(noise(p * 140.0 + uTime * 1.3), noise(p * 140.0 - uTime * 1.1)) - 0.5) * 2.2 * exp(-d * 1.5);',   // 近处细碎波：日月倒影碎成一条光带
+    '  return g * 0.009 / (1.0 + d * d * 0.35); }',
     'void main(){',
     '  vec2 uv = gl_FragCoord.xy / uRes; vec3 rd = rayDir(gl_FragCoord.xy);',
     '  vec4 st = texture2D(uTex, uv); vec3 col;',
@@ -468,15 +494,15 @@
     '      g += normalize(dv + 1e-5) * cos(x * 120.0) * exp(-x * x * 300.0) * exp(-age * 0.75) * 0.8; }',
     '    vec3 n = normalize(vec3(-g.x, 1.0, -g.y));',
     '    vec3 rr = reflect(rd, n); rr.y = max(rr.y, 0.0005);',
-    '    float vx2 = 400.0 + rr.x / rr.z / K, vy2 = 220.0 - rr.y / rr.z / K;',
+    '    float vx2 = 400.0 + rr.x / rr.z / K, vy2 = HZ - rr.y / rr.z / K;',
     '    vec2 uv2 = vec2(vx2 * uMap.x + uMap.y, uRes.y - (vy2 * uMap.x + uMap.z)) / uRes;',
     '    vec4 s2 = texture2D(uTex, clamp(uv2, 0.0, 1.0));',
     '    vec3 refl = (s2.a > 0.75 && uv2.y <= 1.0) ? s2.rgb : tone(sky(rr));',
     '    float fr = 0.02 + 0.98 * pow(1.0 - max(dot(-rd, n), 0.0), 5.0);',
     '    vec3 deep = tone(uFog * 0.18 + vec3(0.01, 0.03, 0.04));',
     '    col = mix(deep, refl, clamp(fr + 0.15, 0.0, 1.0) * 0.9);',
-    '    col += tone(uDiskCol * uP.w * pow(max(dot(rr, uDisk), 0.0), 600.0) * 6.0 + uSunCol * pow(max(dot(rr, uL), 0.0), 900.0) * 3.0 * (1.0 - uP.x));',
-    '    col = mix(col, tone(uFog), (1.0 - exp(-tw * 0.05)) * 0.6);',
+    '    col += tone(uDiskCol * uP.w * smoothstep(0.99988, 0.99997, dot(rr, uDisk)) * 2.2 + uSunCol * pow(max(dot(rr, uL), 0.0), 900.0) * 3.0 * (1.0 - uP.x));',
+    '    col = mix(col, tone(uFog), (1.0 - exp(-tw * 0.04)) * 0.5);',
     '  }',
     '  float hz = exp(-abs(rd.y) * 120.0);',                                // 贴着湖面的薄雾，慢慢流动
     '  float mn = 0.55 + 0.45 * noise(vec2(rd.x / rd.z * 40.0 + uTime * 0.08, uTime * 0.05));',
@@ -509,9 +535,9 @@
     var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-    var tex = gl.createTexture(), fbo = gl.createFramebuffer();
+    var texLo = gl.createTexture(), texHi = gl.createTexture(), fbo = gl.createFramebuffer(), cur = texLo;
     var P = RTP[ph], K = 0.14 / 150;
-    function dirOf(sx, sy) { var v = [(sx - 400) * K, (220 - sy) * K, 1], l = Math.hypot(v[0], v[1], v[2]); return [v[0] / l, v[1] / l, v[2] / l]; }
+    function dirOf(sx, sy) { var v = [(sx - 400) * K, (HYG - sy) * K, 1], l = Math.hypot(v[0], v[1], v[2]); return [v[0] / l, v[1] / l, v[2] / l]; }
     var disk = dirOf(P.disk[0], P.disk[1]);
     var L = P.light ? (function (v) { var l = Math.hypot(v[0], v[1], v[2]); return [v[0] / l, v[1] / l, v[2] / l]; })(P.light) : disk;
     function common(p, W, H, s, ox, oy, t) {
@@ -520,36 +546,55 @@
       gl.uniform3fv(u('uZen'), P.zen); gl.uniform3fv(u('uHor'), P.hor); gl.uniform3fv(u('uSunCol'), P.sun); gl.uniform3fv(u('uFog'), P.fog);
       gl.uniform3fv(u('uL'), L); gl.uniform3fv(u('uDisk'), disk); gl.uniform3fv(u('uDiskCol'), P.diskCol); gl.uniform3fv(u('uFol'), RT_FOL[se]);
       gl.uniform4f(u('uP'), P.night, RT_SNOW[se], P.cloud, P.diskOn);
+      gl.uniform4f(u('uQ'), { spring: 0, summer: 1, autumn: 2, winter: 3 }[se], 0, 0, 0);
       return u;
     }
     var st = { gl: gl };
-    st.resize = function (W, H, s, ox, oy) {
-      // 静态光照：按 1× 像素算一次（最多约 50 万像素），存进纹理
-      var q = Math.min(1, Math.sqrt(520000 / (W * H)), 1 / Math.max(1, (window.devicePixelRatio || 1) * 0.75));
-      var SW = Math.max(2, Math.round(W * q)), SH = Math.max(2, Math.round(H * q));
-      gl.bindTexture(gl.TEXTURE_2D, tex);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, SW, SH, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    function setup(tx, w, h) {
+      gl.bindTexture(gl.TEXTURE_2D, tx);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    }
+    function render(tx, w, h, q, y0, y1) {
       gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
-      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
-      gl.viewport(0, 0, SW, SH);
-      gl.useProgram(pS); common(pS, SW, SH, s * q, ox * q, oy * q, 0);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tx, 0);
+      gl.viewport(0, 0, w, h);
+      if (y0 != null) { gl.enable(gl.SCISSOR_TEST); gl.scissor(0, y0, w, y1 - y0); }
+      gl.useProgram(pS); common(pS, w, h, st.s * q, st.ox * q, st.oy * q, 0);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
+      gl.disable(gl.SCISSOR_TEST);
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    }
+    st.resize = function (W, H, s, ox, oy) {
       st.W = W; st.H = H; st.s = s; st.ox = ox; st.oy = oy;
+      // 先用 0.3× 分辨率马上出一张预览，再按全分辨率分条慢慢补完（避免手机一次算太久卡住）
+      var ql = 0.3, LW = Math.max(2, Math.round(W * ql)), LH = Math.max(2, Math.round(H * ql));
+      setup(texLo, LW, LH); render(texLo, LW, LH, ql); cur = texLo;
+      var qh = Math.min(1, Math.sqrt(1500000 / (W * H)));
+      var HW = Math.max(2, Math.round(W * qh)), HH = Math.max(2, Math.round(H * qh));
+      setup(texHi, HW, HH);
+      st.pend = { w: HW, h: HH, q: qh, y: 0, step: Math.max(8, Math.ceil(HH / Math.max(1, Math.ceil(HW * HH / 110000)))) };
+      if (Q.still) { while (st.pend) st.refine(); }
       var sx = ox + P.disk[0] * s, sy = oy + P.disk[1] * s;
       st.sunUV = [sx / W, 1 - sy / H];
     };
+    st.refine = function () {
+      var p = st.pend; if (!p) return;
+      render(texHi, p.w, p.h, p.q, p.y, Math.min(p.h, p.y + p.step));
+      p.y += p.step;
+      if (p.y >= p.h) { st.pend = null; cur = texHi; }
+    };
     var ripBuf = new Float32Array(16);
     st.frame = function (t, rips) {
+      if (st.pend) st.refine();
       gl.viewport(0, 0, st.W, st.H);
       gl.useProgram(pF);
       var u = common(pF, st.W, st.H, st.s, st.ox, st.oy, t);
       ripBuf.fill(0);
       (rips || []).slice(-4).forEach(function (r, i) { ripBuf[i * 4] = r.wx; ripBuf[i * 4 + 1] = r.wz; ripBuf[i * 4 + 2] = r.t0; ripBuf[i * 4 + 3] = r.dist; });
       gl.uniform4fv(u('uRip'), ripBuf);
-      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, cur);
       gl.uniform1i(u('uTex'), 0); gl.uniform2f(u('uSunUV'), st.sunUV[0], st.sunUV[1]); gl.uniform1f(u('uGod'), P.god);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
@@ -609,7 +654,7 @@
   };
   Scene.prototype.ripple = function (x, y) {
     var t = this.lastT || 0, vx = (x - this.ox) / this.s, vy = (y - this.oy) / this.s, K = 0.14 / 150;
-    var d = [(vx - 400) * K, (220 - vy) * K, 1], l = Math.hypot(d[0], d[1], d[2]);
+    var d = [(vx - 400) * K, ((this.rt ? HYG : HY) - vy) * K, 1], l = Math.hypot(d[0], d[1], d[2]);
     d = [d[0] / l, d[1] / l, d[2] / l];
     if (d[1] >= -0.0005) return;
     var tw = -0.035 / d[1];
@@ -638,13 +683,13 @@
     if (this.W === W && this.H === H) return;
     this.W = W; this.H = H; this.dpr = dpr;
     this.cv.width = W; this.cv.height = H;
-    var head = this.kind === 'hero' ? 78 : 0;                              // 顶部多留一截天空放标题文字
+    var head = this.kind === 'hero' ? (this.rt ? 150 : 78) : 0;                              // 顶部多留一截天空放标题文字
     var s = Math.max(W / VW, H / (VH + head));
     this.s = s; this.ox = (W - VW * s) / 2; this.oy = H - VH * s;
     if (this.rt) { this.glc.width = W; this.glc.height = H; this.rt.resize(W, H, s, this.ox, this.oy); }
     this.f = fbmMaker(11);
     this.L = buildLayers({ P: this.P, W: W, H: H, s: s, ox: this.ox, oy: this.oy, f: this.f, seed: 29, se: this.se, ph: this.ph });
-    this.HYd = Math.round(this.oy + HY * s);
+    this.HYd = Math.round(this.oy + (this.rt ? HYG : HY) * s);
     var P = this.P, r = rng(77);
     this.clouds = [];
     var nc = this.ph === 'night' ? 2 : 4;
@@ -683,7 +728,6 @@
     if (this.rt) {                                                          // 光追模式：背景交给 WebGL，这层只画前景、落叶和暗角
       this.rt.frame(t, this.rips);
       c.clearRect(0, 0, W, H);
-      c.drawImage(L.fg, 0, 0);
       this.drawParts(c, t);
       c.drawImage(L.ov, 0, 0);
       return;
