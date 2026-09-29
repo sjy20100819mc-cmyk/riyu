@@ -410,7 +410,7 @@
     if (dc.pos >= dc.queue.length) { dcFinish(); return; }
     var w = dc.queue[dc.pos];
     $('dcKana').textContent = w.k;
-    $('dcKanji').textContent = w.j ? (w.j + '　' + w.a) : ('（' + w.a + '）');
+    $('dcKanji').textContent = w.j ? (w.j + (w.a ? '　' + w.a : '')) : (w.a ? '（' + w.a + '）' : '');
     $('dcMean').textContent = w.c;
     $('dcTipv').textContent = '💡 ' + w.t;
     var im = $('dcImg');

@@ -37,6 +37,10 @@ var JP_AUDIO = {
 "audio_jp/d2de6b00c6cf.mp3",
 "audio_jp_neural/d2de6b00c6cf.mp3"
 ],
+"いなかの みかん": [
+"",
+"audio_jp_neural/5f5eeadc3e84.mp3"
+],
 "いま": [
 "audio_jp/23a32f106a4e.mp3",
 "audio_jp_neural/23a32f106a4e.mp3"
@@ -56,6 +60,14 @@ var JP_AUDIO = {
 "えんぴつ": [
 "audio_jp/d3d3e4e3d160.mp3",
 "audio_jp_neural/d3d3e4e3d160.mp3"
+],
+"おうさんはうさぎがすきです。わたしもすきです": [
+"",
+"audio_jp_neural/c0c1a02ab937.mp3"
+],
+"おうさんはがくせいです": [
+"",
+"audio_jp_neural/718c37528462.mp3"
 ],
 "おかあさん": [
 "audio_jp/a2a755f4c07f.mp3",
@@ -77,6 +89,10 @@ var JP_AUDIO = {
 "",
 "audio_jp_neural/6c49211d949f.mp3"
 ],
+"おなじクラスのおうさん": [
+"",
+"audio_jp_neural/72a25ffea8ee.mp3"
+],
 "おにいさん": [
 "audio_jp/ecaf215b0381.mp3",
 "audio_jp_neural/ecaf215b0381.mp3"
@@ -85,9 +101,21 @@ var JP_AUDIO = {
 "audio_jp/8cf44fafbf93.mp3",
 "audio_jp_neural/8cf44fafbf93.mp3"
 ],
+"おはようございます": [
+"",
+"audio_jp_neural/5a3c5f71eeac.mp3"
+],
 "おばあさん": [
 "audio_jp/55ab764826fe.mp3",
 "audio_jp_neural/55ab764826fe.mp3"
+],
+"おやすみなさい": [
+"",
+"audio_jp_neural/17b912b634f3.mp3"
+],
+"お休みなさい": [
+"",
+"audio_jp_neural/664b3888e654.mp3"
 ],
 "お兄さん": [
 "audio_jp/2324576c4116.mp3",
@@ -213,6 +241,14 @@ var JP_AUDIO = {
 "audio_jp/686b28d7d8a5.mp3",
 "audio_jp_neural/686b28d7d8a5.mp3"
 ],
+"こんにちは": [
+"",
+"audio_jp_neural/20427a708c3f.mp3"
+],
+"こんばんは": [
+"",
+"audio_jp_neural/eabdada4abd0.mp3"
+],
 "ご": [
 "",
 "audio_jp_neural/27a87259d93f.mp3"
@@ -228,6 +264,10 @@ var JP_AUDIO = {
 "さ": [
 "",
 "audio_jp_neural/7a4faed063b6.mp3"
+],
+"さようなら、バイバイ、またあした、じゃあね": [
+"",
+"audio_jp_neural/efd05c5824a1.mp3"
 ],
 "さんぷん": [
 "audio_jp/83f9d1705203.mp3",
@@ -369,6 +409,10 @@ var JP_AUDIO = {
 "audio_jp/2d59d2ea9134.mp3",
 "audio_jp_neural/2d59d2ea9134.mp3"
 ],
+"ちちはせんせいではありません": [
+"",
+"audio_jp_neural/0b4c7efd34b8.mp3"
+],
 "ちゅうかりょうり": [
 "audio_jp/0fc5340250d8.mp3",
 "audio_jp_neural/0fc5340250d8.mp3"
@@ -441,6 +485,14 @@ var JP_AUDIO = {
 "",
 "audio_jp_neural/76504d613664.mp3"
 ],
+"どうぞ、よろしくおねがいします": [
+"",
+"audio_jp_neural/0749798edb92.mp3"
+],
+"どうぞ、よろしくお願いします": [
+"",
+"audio_jp_neural/a6bbc07317d9.mp3"
+],
 "どこ": [
 "audio_jp/27b6a68a3360.mp3",
 "audio_jp_neural/27b6a68a3360.mp3"
@@ -452,6 +504,10 @@ var JP_AUDIO = {
 "なに": [
 "audio_jp/b41e23d04a56.mp3",
 "audio_jp_neural/b41e23d04a56.mp3"
+],
+"なにをかいますか": [
+"",
+"audio_jp_neural/c7c7819589b8.mp3"
 ],
 "にくや": [
 "audio_jp/30385eba89fe.mp3",
@@ -477,6 +533,14 @@ var JP_AUDIO = {
 "",
 "audio_jp_neural/ebed83d49401.mp3"
 ],
+"はじめまして、おうです": [
+"",
+"audio_jp_neural/75350dc92657.mp3"
+],
+"はじめまして、王です": [
+"",
+"audio_jp_neural/df541931d1b7.mp3"
+],
 "はなぢ": [
 "",
 "audio_jp_neural/6713ba512393.mp3"
@@ -484,6 +548,10 @@ var JP_AUDIO = {
 "はは": [
 "audio_jp/0ef29b925c1d.mp3",
 "audio_jp_neural/0ef29b925c1d.mp3"
+],
+"ははとにほんへいきます": [
+"",
+"audio_jp_neural/923405d7449d.mp3"
 ],
 "ば": [
 "",
@@ -544,6 +612,10 @@ var JP_AUDIO = {
 "へや": [
 "",
 "audio_jp_neural/3cf1c4713c0d.mp3"
+],
+"へやでべんきょうをします": [
+"",
+"audio_jp_neural/ea7c7af2c76b.mp3"
 ],
 "べ": [
 "",
@@ -745,6 +817,14 @@ var JP_AUDIO = {
 "audio_jp/a4e764301cf7.mp3",
 "audio_jp_neural/a4e764301cf7.mp3"
 ],
+"レストランでしょくじをします": [
+"",
+"audio_jp_neural/f8beeecf865c.mp3"
+],
+"レストランで食事をします": [
+"",
+"audio_jp_neural/cd8ed5720f91.mp3"
+],
 "ロボット": [
 "",
 "audio_jp_neural/10f3e14d0162.mp3"
@@ -789,6 +869,10 @@ var JP_AUDIO = {
 "",
 "audio_jp_neural/a590eefc9181.mp3"
 ],
+"何を買いますか": [
+"",
+"audio_jp_neural/2e6ff0000c8b.mp3"
+],
 "僕": [
 "",
 "audio_jp_neural/d9b58894b25e.mp3"
@@ -832,6 +916,10 @@ var JP_AUDIO = {
 "同じ": [
 "",
 "audio_jp_neural/3ad98be897c2.mp3"
+],
+"同じクラスの王さん": [
+"",
+"audio_jp_neural/1f8411c11944.mp3"
 ],
 "図書館": [
 "audio_jp/dbc8c3de0ea5.mp3",
@@ -941,6 +1029,10 @@ var JP_AUDIO = {
 "audio_jp/78ce0b021c44.mp3",
 "audio_jp_neural/78ce0b021c44.mp3"
 ],
+"母と日本へ行きます": [
+"",
+"audio_jp_neural/3facbf60abcb.mp3"
+],
 "母は かばんを 買います。": [
 "",
 "audio_jp_neural/c20bc67af113.mp3"
@@ -957,6 +1049,18 @@ var JP_AUDIO = {
 "audio_jp/0b27d61a0761.mp3",
 "audio_jp_neural/0b27d61a0761.mp3"
 ],
+"父は先生ではありません": [
+"",
+"audio_jp_neural/8390e5619c2c.mp3"
+],
+"王さんはうさぎが好きです。私も好きです": [
+"",
+"audio_jp_neural/e6a64d0d596a.mp3"
+],
+"王さんは学生です": [
+"",
+"audio_jp_neural/4bc33506d190.mp3"
+],
 "生徒": [
 "audio_jp/d287d055b166.mp3",
 "audio_jp_neural/d287d055b166.mp3"
@@ -964,6 +1068,10 @@ var JP_AUDIO = {
 "田中さんの 家です。": [
 "",
 "audio_jp_neural/50554a92e7d5.mp3"
+],
+"田舎のみかん": [
+"",
+"audio_jp_neural/408b3194929a.mp3"
 ],
 "町": [
 "audio_jp/b72d6f67e831.mp3",
@@ -1040,6 +1148,10 @@ var JP_AUDIO = {
 "部屋": [
 "",
 "audio_jp_neural/9d5363f136a0.mp3"
+],
+"部屋で勉強をします": [
+"",
+"audio_jp_neural/b71255c38833.mp3"
 ],
 "野球": [
 "",

@@ -172,6 +172,9 @@ button.act:active{transform:scale(.972);filter:brightness(1.04)}
   background:linear-gradient(165deg,rgba(255,255,255,.7),rgba(255,255,255,.5));
   border:1px dashed rgba(11,18,32,.18)}
 .ans.show{display:block;animation:rise .26s cubic-bezier(.32,.72,0,1)}
+/* 保险：某些 WebView 里 CSS 动画时间不推进（currentTime 恒为 0），答案区会永远停在 opacity:0 → 白板。
+   这里强制不透明，只保留位移动画，任何环境下「对答案」都看得见。 */
+.ans.show{opacity:1!important}
 .kana{font-size:29px;font-weight:680}
 .kanji{font-size:16px;color:#3a4252;margin-top:5px}
 .mean{font-size:14.5px;color:var(--red);font-weight:600;margin-top:6px}
@@ -523,12 +526,12 @@ table.all td.s{text-align:right;font-size:12px;color:var(--ink3)}
   <a class="link" href="%E5%90%AC%E5%86%99%E7%BA%B8.html">📄 听写纸（顺序／乱序）</a>
 </div>
 
-<div class="foot">数据源 词表.js?v=09290731 ｜ 改词只改那一处</div>
+<div class="foot">数据源 词表.js?v=09292245 ｜ 改词只改那一处</div>
 
 <script src="ambient_data.js?v=1"></script>
 <script src="ambient.js?v=1"></script>
-<script src="%E9%9F%B3%E9%A2%91%E7%B4%A2%E5%BC%95.js?v=09290741"></script>
-<script src="%E8%AF%8D%E8%A1%A8.js?v=09290741"></script>
-<script src="%E6%97%A5%E8%AF%AD.js?v=09290741"></script>
+<script src="%E9%9F%B3%E9%A2%91%E7%B4%A2%E5%BC%95.js?v=09292245"></script>
+<script src="%E8%AF%8D%E8%A1%A8.js?v=09292245"></script>
+<script src="%E6%97%A5%E8%AF%AD.js?v=09292245"></script>
 </body>
 </html>
