@@ -113,6 +113,10 @@ var JP_AUDIO = {
 "audio_jp/3dcc92b12e28.mp3",
 "audio_jp_neural/ba7fcc21bc06.mp3"
 ],
+"かき": [
+"",
+"audio_jp_neural/ecb3ad2f57ee.mp3"
+],
 "かぎ": [
 "audio_jp/2aa878d72ad6.mp3",
 "audio_jp_neural/2aa878d72ad6.mp3"
@@ -213,6 +217,10 @@ var JP_AUDIO = {
 "",
 "audio_jp_neural/27a87259d93f.mp3"
 ],
+"ごご": [
+"",
+"audio_jp_neural/8338e52c2a4e.mp3"
+],
 "ごはん": [
 "audio_jp/35206e78999e.mp3",
 "audio_jp_neural/35206e78999e.mp3"
@@ -245,9 +253,17 @@ var JP_AUDIO = {
 "",
 "audio_jp_neural/66d99119d39e.mp3"
 ],
+"しょくじ": [
+"",
+"audio_jp_neural/63fd1574d638.mp3"
+],
 "じ": [
 "",
 "audio_jp_neural/41f11fe610d4.mp3"
+],
+"じしゅう": [
+"",
+"audio_jp_neural/289a724d5ed2.mp3"
 ],
 "じてんしゃ": [
 "audio_jp/211dddf921a2.mp3",
@@ -365,6 +381,10 @@ var JP_AUDIO = {
 "",
 "audio_jp_neural/3ca5c2ce8075.mp3"
 ],
+"ちゅうごくじん": [
+"",
+"audio_jp_neural/29de066bce85.mp3"
+],
 "ぢ": [
 "",
 "audio_jp_neural/139b8c6e1d18.mp3"
@@ -413,6 +433,10 @@ var JP_AUDIO = {
 "audio_jp/36f9f83211c1.mp3",
 "audio_jp_neural/36f9f83211c1.mp3"
 ],
+"となり": [
+"",
+"audio_jp_neural/2d67074e11e6.mp3"
+],
 "ど": [
 "",
 "audio_jp_neural/76504d613664.mp3"
@@ -440,6 +464,10 @@ var JP_AUDIO = {
 "にほんご": [
 "audio_jp/f31040750b56.mp3",
 "audio_jp_neural/f31040750b56.mp3"
+],
+"にんじん": [
+"",
+"audio_jp_neural/73e2d887886b.mp3"
 ],
 "は": [
 "",
@@ -561,6 +589,10 @@ var JP_AUDIO = {
 "audio_jp/75fb0ca0a3a4.mp3",
 "audio_jp_neural/75fb0ca0a3a4.mp3"
 ],
+"みかん": [
+"",
+"audio_jp_neural/ce1ed3cf0657.mp3"
+],
 "みず": [
 "audio_jp/1a3d0aa360f2.mp3",
 "audio_jp_neural/1a3d0aa360f2.mp3"
@@ -645,6 +677,10 @@ var JP_AUDIO = {
 "",
 "audio_jp_neural/735e070a1dc7.mp3"
 ],
+"ジョギング": [
+"",
+"audio_jp_neural/5e6b14b91f9c.mp3"
+],
 "スカート": [
 "audio_jp/6fb93ec6c83f.mp3",
 "audio_jp_neural/6fb93ec6c83f.mp3"
@@ -656,6 +692,10 @@ var JP_AUDIO = {
 "タオル": [
 "audio_jp/ab3ea82f2cad.mp3",
 "audio_jp_neural/ab3ea82f2cad.mp3"
+],
+"チョコレート": [
+"",
+"audio_jp_neural/b9945947e5c6.mp3"
 ],
 "テストは あしたです。": [
 "",
@@ -685,6 +725,10 @@ var JP_AUDIO = {
 "",
 "audio_jp_neural/672d84379947.mp3"
 ],
+"ピアノ": [
+"",
+"audio_jp_neural/64c024120119.mp3"
+],
 "ベッド": [
 "",
 "audio_jp_neural/de92f995f049.mp3"
@@ -705,6 +749,10 @@ var JP_AUDIO = {
 "",
 "audio_jp_neural/10f3e14d0162.mp3"
 ],
+"中国人": [
+"",
+"audio_jp_neural/bf72e07ef4f6.mp3"
+],
 "中国語": [
 "",
 "audio_jp_neural/03f89ec1c0c4.mp3"
@@ -716,6 +764,10 @@ var JP_AUDIO = {
 "中華料理": [
 "audio_jp/bc5e934d090c.mp3",
 "audio_jp_neural/bc5e934d090c.mp3"
+],
+"人参": [
+"",
+"audio_jp_neural/239ae29ae3c4.mp3"
 ],
 "今": [
 "audio_jp/d2130d70a08e.mp3",
@@ -768,6 +820,10 @@ var JP_AUDIO = {
 "医者": [
 "audio_jp/cfb25a13c72a.mp3",
 "audio_jp_neural/cfb25a13c72a.mp3"
+],
+"午後": [
+"",
+"audio_jp_neural/3ad626b47ca9.mp3"
 ],
 "司会は 田中さんですか。": [
 "",
@@ -873,6 +929,10 @@ var JP_AUDIO = {
 "audio_jp/4211adc5ccc6.mp3",
 "audio_jp_neural/4211adc5ccc6.mp3"
 ],
+"柿": [
+"",
+"audio_jp_neural/bb251e505cdc.mp3"
+],
 "武術": [
 "audio_jp/454f80e00e03.mp3",
 "audio_jp_neural/454f80e00e03.mp3"
@@ -933,6 +993,10 @@ var JP_AUDIO = {
 "audio_jp/2ff4a6f70b6b.mp3",
 "audio_jp_neural/2ff4a6f70b6b.mp3"
 ],
+"自習": [
+"",
+"audio_jp_neural/ea1e1f63059c.mp3"
+],
 "蕎麦": [
 "audio_jp/4cf59465a07d.mp3",
 "audio_jp_neural/4cf59465a07d.mp3"
@@ -989,6 +1053,10 @@ var JP_AUDIO = {
 "audio_jp/287a06131f4d.mp3",
 "audio_jp_neural/287a06131f4d.mp3"
 ],
+"隣": [
+"",
+"audio_jp_neural/93c323048753.mp3"
+],
 "雑誌": [
 "",
 "audio_jp_neural/493879fafdb2.mp3"
@@ -1004,6 +1072,10 @@ var JP_AUDIO = {
 "雲": [
 "audio_jp/a5c0790365cb.mp3",
 "audio_jp_neural/a5c0790365cb.mp3"
+],
+"食事": [
+"",
+"audio_jp_neural/f0ddd1ecf81f.mp3"
 ],
 "駅": [
 "audio_jp/e70b5299d05d.mp3",
